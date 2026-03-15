@@ -75,7 +75,7 @@ export const ListarStockPage = () => {
                                         </td>
                                         <td className="p-4 text-right">
                                             <div className="flex justify-end items-center gap-2">
-                                                <CrearVarianteProducto />
+
                                                 <div className="flex items-center border-l border-zinc-100 ml-2 pl-2 gap-1">
                                                     <button className="p-2 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-all rounded-sm">
                                                         <Edit3 size={15} />
