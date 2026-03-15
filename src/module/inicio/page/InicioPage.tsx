@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
+import type { ListarProductoPublicoI } from "../../producto/interface/producto";
+import { listarProductosPublico } from "../../producto/service/producto";
+import { urlBackend } from "../../../core/config/intanceAxios";
 
 export const InicioPage = () => {
-    // Imágenes del carrusel
+
     const imagenesHero = [
         "/img/imagenVertical.jpg",
-        "/img/hero2.jpg", // Asegúrate de tener estas rutas o usa placeholders
+        "/img/hero2.jpg",
         "/img/hero3.jpg"
     ];
 
     const [currentImage, setCurrentImage] = useState(0);
+    const [productos, setProductos] = useState<ListarProductoPublicoI[]>([]);
 
-    // Efecto para cambio automático
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentImage((prev) => (prev + 1) % imagenesHero.length);
@@ -18,6 +21,16 @@ export const InicioPage = () => {
         return () => clearInterval(timer);
     }, [imagenesHero.length]);
 
+    useEffect(() => {
+        (async () => {
+            try {
+                const reponse = await listarProductosPublico({ destacado: "destacado" })
+                setProductos(reponse)
+            } catch (error) {
+
+            }
+        })()
+    }, [])
     return (
         <div className="w-full bg-white text-zinc-800">
 
@@ -86,18 +99,18 @@ export const InicioPage = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-16">
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                        <div key={item} className="group cursor-pointer">
+                    {productos.map((item) => (
+                        <div key={item._id} className="group cursor-pointer">
                             <div className="aspect-[3/4] overflow-hidden bg-zinc-50 mb-6 relative">
                                 <img
-                                    src="/img/imagenVertical.jpg"
+                                    src={`${urlBackend}/${item.imagen}`}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     alt="Producto"
                                 />
                             </div>
                             <div className="space-y-2 text-center">
-                                <h3 className="text-xs uppercase tracking-[0.15em] font-medium text-zinc-600">Producto {item}</h3>
-                                <p className="text-sm font-bold">Bs. 250</p>
+                                <h3 className="text-xs uppercase tracking-[0.15em] font-medium text-zinc-600">Producto {item.nombre}</h3>
+                                <p className="text-sm font-bold">{item.precioVenta} Bs</p>
                             </div>
                         </div>
                     ))}

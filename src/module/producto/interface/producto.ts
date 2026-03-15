@@ -4,6 +4,9 @@ export interface FormProducto {
     categoria: string;
     destacado: boolean;
     publico: boolean;
+    precioVenta: number
+    precioCompra: number
+
 }
 
 
@@ -14,6 +17,9 @@ export interface ProductoI {
     categoria: string
     publico: boolean
     destacado: boolean
+    precioVenta: number
+    precioCompra: number
+    descripcion: string
 }
 
 export interface VarianteForm {
@@ -33,21 +39,19 @@ export interface VarianteProductoI {
 export interface ImagenesI {
     _id: string;
     path: string;
+    principal: boolean
 
 }
 
 
-export interface StockI {
-    producto: string
-    varianteProducto: string
-    cantidad: number,
-    precio: number
-
+export interface ListarProductoPublicoI {
+    _id: string;
+    nombre: string
+    imagen: string
+    precioVenta: number
 }
 
-export interface stockRegistradoI extends StockI {
-    nombre:string
-    categoria:string
-    talla:string
-    color:string
+export interface filtroProductoPublicoI {
+    destacado?: string
+    categoria?: string
 }

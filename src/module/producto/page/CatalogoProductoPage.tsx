@@ -1,62 +1,97 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { listarProductosPublico } from "../service/producto";
+import type { ListarProductoPublicoI } from "../interface/producto";
+import { urlBackend } from "../../../core/config/intanceAxios";
+import { Plus } from "lucide-react";
+import { Link } from "react-router";
+import { listarCategoria } from "../../categoria/service/categoria";
+import type { listarCategoriaI } from "../../categoria/interface/categoria";
 
 export const CatalogoProductoPage = () => {
-    const categorias = ["Polleras", "Blusas", "Mantas", "Sombreros", "Accesorios"];
+    const [productos, setProductos] = useState<ListarProductoPublicoI[]>([]);
+    const [categorias, setCategorias] = useState<listarCategoriaI[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const [reponseProducto, responseCategoria] = await Promise.all([
+                    listarProductosPublico({ destacado: "" }),
+                    listarCategoria()
+                ])
+                setCategorias(responseCategoria)
+                setProductos(reponseProducto)
+
+            } catch (error) {
+                console.error(error);
+            }
+        })()
+    }, [])
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-20">
-
-            {/* Título Minimalista */}
-            <header className="text-center mb-12">
-                <h1 className="text-3xl font-light uppercase tracking-[0.2em] text-zinc-800">
-                    Catálogo
-                </h1>
-                <div className="h-px w-12 bg-pink-400 mx-auto mt-4"></div>
-            </header>
-
-            {/* Categorías - Estilo de la InicioPage */}
-            <div className="flex flex-wrap justify-center gap-8 mb-16">
-                {categorias.map((cat, i) => (
-                    <button
-                        key={cat}
-                        className={`text-xs uppercase tracking-widest font-bold transition-colors ${i === 0 ? "text-pink-500 border-b border-pink-500" : "text-zinc-400 hover:text-zinc-800"
-                            }`}
-                    >
-                        {cat}
-                    </button>
-                ))}
-            </div>
-
-            {/* Grilla de Productos con las cards de la InicioPage */}
+        <div className="min-h-screen bg-white">
             <div className="max-w-7xl mx-auto px-6 py-20">
-                <div className="flex justify-between items-end mb-12">
-                    <h2 className="text-2xl font-light uppercase tracking-widest">Destacados</h2>
-                    <a href="#" className="text-sm border-b border-zinc-800 pb-1 hover:text-pink-500 hover:border-pink-500 transition-all">Ver todo</a>
+
+                {/* Título Minimalista */}
+                <header className="text-center mb-12">
+                    <h1 className="text-3xl font-light uppercase tracking-[0.2em] text-zinc-800">
+                        Catálogo
+                    </h1>
+                    <div className="h-px w-12 bg-pink-400 mx-auto mt-4"></div>
+                </header>
+
+                {/* Categorías */}
+                <div className="flex flex-wrap justify-center gap-8 mb-16">
+                    {categorias.map((cat, i) => (
+                        <button
+                            key={cat.id}
+                            className={`text-xs uppercase tracking-widest font-bold transition-colors ${i === 0 ? "text-pink-500 border-b border-pink-500" : "text-zinc-400 hover:text-zinc-800"
+                                }`}
+                        >
+                            {cat.nombre}
+                        </button>
+                    ))}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-12">
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                        <div key={item} className="group cursor-pointer">
-                            <div className="aspect-[3/4] overflow-hidden bg-zinc-50 mb-4">
+                {/* Grilla de Productos */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-16">
+                    {productos.map((item) => (
+                        <div key={item._id} className="group">
+                            {/* Contenedor de Imagen con Overlay */}
+                            <div className="relative aspect-[3/4] overflow-hidden bg-zinc-50 mb-5">
                                 <img
-                                    src="/img/imagenVertical.jpg"
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                    alt="Producto"
+                                    src={`${urlBackend}/${item.imagen}`}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    alt={item.nombre}
                                 />
+
+                                {/* Overlay que aparece en Hover */}
+                                <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <Link
+                                        to={`/producto/${item._id}`}
+                                        className="bg-white text-zinc-900 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-zinc-900 hover:text-white flex items-center gap-2"
+                                    >
+                                        <Plus size={12} /> Ver Detalle
+                                    </Link>
+                                </div>
                             </div>
-                            <div className="space-y-1 text-center">
-                                <h3 className="text-sm uppercase tracking-wider font-medium">Producto {item}</h3>
-                                <p className="text-zinc-400 text-xs tracking-tighter">Colección Tradición</p>
-                                <p className="text-sm font-bold pt-2">Bs. 250</p>
+
+                            {/* Información del Producto */}
+                            <div className="space-y-1.5 text-center">
+                                <h3 className="text-[11px] uppercase tracking-[0.15em] font-medium text-zinc-500 group-hover:text-zinc-900 transition-colors">
+                                    {item.nombre}
+                                </h3>
+                                <div className="h-[1px] w-4 bg-zinc-200 mx-auto my-2 group-hover:w-8 transition-all duration-500"></div>
+                                <p className="text-sm font-black text-zinc-900 tracking-tighter">
+                                    {item.precioVenta} <span className="text-[10px] font-normal">Bs</span>
+                                </p>
                             </div>
                         </div>
                     ))}
                 </div>
+
+                {/* Línea final sutil */}
+                <div className="w-full h-px bg-zinc-100 mt-20"></div>
             </div>
-
-            {/* Línea final sutil */}
-            <div className="w-full h-px bg-zinc-100 mt-20"></div>
-
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { ArrowRight, Edit2, Trash2, Tag, CheckCircle2 } from 'lucide-react'
+import { Edit2, Trash2, Tag, CheckCircle2, ChevronRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import type { ProductoI, VarianteProductoI } from '../interface/producto'
 import { listarVarianteProducto } from '../service/producto'
@@ -12,8 +12,6 @@ export const ListarVariantes = ({ producto, setVariante, variante }: { producto:
         (async () => {
             try {
                 const response = await listarVarianteProducto(producto._id)
-                console.log(response);
-
                 setVariantes(response)
             } catch (error) {
                 console.log(error);
@@ -22,7 +20,7 @@ export const ListarVariantes = ({ producto, setVariante, variante }: { producto:
     }, [producto, isReloading])
 
     return (
-        <div className="space-y-1">
+        <div className="w-full">
             <div className="flex items-center gap-2 mb-3 px-1">
                 <Tag size={12} className="text-zinc-400" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
@@ -30,72 +28,74 @@ export const ListarVariantes = ({ producto, setVariante, variante }: { producto:
                 </span>
             </div>
 
-            {variantes.length === 0 ? (
-                <div className="p-8 border border-dashed border-zinc-200 text-center">
-                    <p className="text-[10px] uppercase text-zinc-400 font-medium">Sin variantes registradas</p>
-                </div>
-            ) : (
-                variantes.map(v => {
-                    const estaSeleccionado = variante === v._id;
+            <div className="border border-zinc-100 rounded-sm overflow-hidden shadow-sm">
+                <table className="w-full text-left border-collapse bg-white">
+                    <thead>
+                        <tr className="bg-zinc-50 border-b border-zinc-100 text-[9px] uppercase tracking-tighter text-zinc-500">
+                            <th className="w-10 py-3 text-center">Sel.</th>
+                            <th className="px-4 py-3 font-bold">Talla / Medida</th>
+                            <th className="px-4 py-3 font-bold">Color / Acabado</th>
+                            <th className="px-4 py-3 font-bold text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-50">
+                        {variantes.length === 0 ? (
+                            <tr>
+                                <td colSpan={5} className="p-8 text-center">
+                                    <p className="text-[10px] uppercase text-zinc-300 font-medium tracking-widest">
+                                        Sin variantes registradas
+                                    </p>
+                                </td>
+                            </tr>
+                        ) : (
+                            variantes.map(v => {
+                                const estaSeleccionado = variante === v._id;
 
-                    return (
-                        <div
-                            key={v._id}
-                            onClick={() => setVariante(v._id)}
-                            className={`group flex items-center justify-between p-3 border cursor-pointer transition-all duration-200 ${estaSeleccionado
-                                ? "border-zinc-900 bg-zinc-50 ring-1 ring-zinc-900"
-                                : "border-zinc-100 hover:border-zinc-400 bg-white"
-                                }`}
-                        >
-                            <div className="flex items-center gap-4">
-                                {/* Check o Barra Lateral */}
-                                {estaSeleccionado ? (
-                                    <div className="flex items-center justify-center w-1 h-8">
-                                        <CheckCircle2 size={16} className="text-zinc-900" />
-                                    </div>
-                                ) : (
-                                    <div className="w-1 h-8 bg-zinc-200 group-hover:bg-zinc-900 transition-colors" />
-                                )}
-
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <span className={`text-xs font-black uppercase tracking-tight ${estaSeleccionado ? "text-zinc-900" : "text-zinc-500"}`}>
-                                            Talla {v.talla}
-                                        </span>
-                                        <span className="text-[10px] text-zinc-400 font-bold uppercase">/</span>
-                                        <span className={`text-xs font-medium uppercase ${estaSeleccionado ? "text-zinc-900" : "text-zinc-600"}`}>
-                                            {v.color}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-2 mt-0.5">
-                                        <span className="text-[9px] font-mono text-zinc-400 uppercase">
-                                            ID: {v._id.slice(-6)}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-4" onClick={(e) => e.stopPropagation()}>
-                                {/* Botones de acción */}
-                                <div className={`flex gap-3 transition-all ${estaSeleccionado ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
-                                    <button
-                                        className="p-1.5 hover:bg-zinc-200 rounded-full text-zinc-400 hover:text-zinc-900 transition-colors"
+                                return (
+                                    <tr
+                                        key={v._id}
+                                        onClick={() => setVariante(v._id)}
+                                        className={`group cursor-pointer transition-colors ${estaSeleccionado ? "bg-zinc-900 text-white" : "hover:bg-zinc-50"
+                                            }`}
                                     >
-                                        <Edit2 size={14} />
-                                    </button>
-                                    <button
-                                        className="p-1.5 hover:bg-red-50 rounded-full text-zinc-400 hover:text-red-600 transition-colors"
-                                    >
-                                        <Trash2 size={14} />
-                                    </button>
-                                </div>
+                                        <td className="py-3 text-center">
+                                            <div className="flex justify-center">
+                                                {estaSeleccionado ? (
+                                                    <CheckCircle2 size={14} className="text-white" />
+                                                ) : (
+                                                    <div className="w-3 h-3 rounded-full border border-zinc-300 group-hover:border-zinc-900" />
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <span className={`text-xs font-black uppercase ${estaSeleccionado ? "text-white" : "text-zinc-900"}`}>
+                                                {v.talla}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <span className={`text-xs font-medium uppercase ${estaSeleccionado ? "text-zinc-300" : "text-zinc-600"}`}>
+                                                {v.color}
+                                            </span>
+                                        </td>
 
-                                <ArrowRight size={14} className={`${estaSeleccionado ? "text-zinc-900" : "text-zinc-300"}`} />
-                            </div>
-                        </div>
-                    )
-                })
-            )}
+                                        <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                                            <div className="flex justify-center gap-2">
+                                                <button className={`p-1 transition-colors ${estaSeleccionado ? "text-zinc-400 hover:text-white" : "text-zinc-300 hover:text-zinc-900"}`}>
+                                                    <Edit2 size={14} />
+                                                </button>
+                                                <button className={`p-1 transition-colors ${estaSeleccionado ? "text-zinc-400 hover:text-red-400" : "text-zinc-300 hover:text-red-600"}`}>
+                                                    <Trash2 size={14} />
+                                                </button>
+                                                <ChevronRight size={14} className={`ml-1 ${estaSeleccionado ? "text-white" : "text-zinc-200"}`} />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }
