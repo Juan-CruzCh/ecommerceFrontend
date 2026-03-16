@@ -56,7 +56,7 @@ export const CatalogoProductoPage = () => {
                 {/* Grilla de Productos */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-16">
                     {productos.map((item) => (
-                     <CardProducto item={item}/>
+                        <CardProducto item={item} />
                     ))}
                 </div>
 
