@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { ListarProductoPublicoI } from "../../producto/interface/producto";
 import { listarProductosPublico } from "../../producto/service/producto";
 import { urlBackend } from "../../../core/config/intanceAxios";
+import { CardProducto } from "../../producto/components/CardProducto";
 
 export const InicioPage = () => {
 
@@ -100,19 +101,7 @@ export const InicioPage = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-16">
                     {productos.map((item) => (
-                        <div key={item._id} className="group cursor-pointer">
-                            <div className="aspect-[3/4] overflow-hidden bg-zinc-50 mb-6 relative">
-                                <img
-                                    src={`${urlBackend}/${item.imagenPrincipal}`}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    alt="Producto"
-                                />
-                            </div>
-                            <div className="space-y-2 text-center">
-                                <h3 className="text-xs uppercase tracking-[0.15em] font-medium text-zinc-600">Producto {item.nombre}</h3>
-                                <p className="text-sm font-bold">{item.precioVenta} Bs</p>
-                            </div>
-                        </div>
+                        <CardProducto item={item}/>
                     ))}
                 </div>
             </div>

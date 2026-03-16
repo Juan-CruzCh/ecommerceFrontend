@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { Link } from "react-router";
 import { listarCategoria } from "../../categoria/service/categoria";
 import type { listarCategoriaI } from "../../categoria/interface/categoria";
+import { CardProducto } from "../components/CardProducto";
 
 export const CatalogoProductoPage = () => {
     const [productos, setProductos] = useState<ListarProductoPublicoI[]>([]);
@@ -55,37 +56,7 @@ export const CatalogoProductoPage = () => {
                 {/* Grilla de Productos */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-16">
                     {productos.map((item) => (
-                        <div key={item._id} className="group">
-                            {/* Contenedor de Imagen con Overlay */}
-                            <div className="relative aspect-[3/4] overflow-hidden bg-zinc-50 mb-5">
-                                <img
-                                    src={`${urlBackend}/${item.imagenPrincipal}`}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    alt={item.nombre}
-                                />
-
-                                {/* Overlay que aparece en Hover */}
-                                <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <Link
-                                        to={`/detalle/producto/${item._id}`}
-                                        className="bg-white text-zinc-900 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-zinc-900 hover:text-white flex items-center gap-2"
-                                    >
-                                        <Plus size={12} /> Ver Detalle
-                                    </Link>
-                                </div>
-                            </div>
-
-                            {/* Información del Producto */}
-                            <div className="space-y-1.5 text-center">
-                                <h3 className="text-[11px] uppercase tracking-[0.15em] font-medium text-zinc-500 group-hover:text-zinc-900 transition-colors">
-                                    {item.nombre}
-                                </h3>
-                                <div className="h-[1px] w-4 bg-zinc-200 mx-auto my-2 group-hover:w-8 transition-all duration-500"></div>
-                                <p className="text-sm font-black text-zinc-900 tracking-tighter">
-                                    {item.precioVenta} <span className="text-[10px] font-normal">Bs</span>
-                                </p>
-                            </div>
-                        </div>
+                     <CardProducto item={item}/>
                     ))}
                 </div>
 

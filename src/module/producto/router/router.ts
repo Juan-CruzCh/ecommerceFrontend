@@ -5,7 +5,7 @@ import { ProductoDetallePage } from "../page/DetalleProductoPage";
 export const productosRouter: RouterI[] = [
     {
         element: CatalogoProductoPage,
-        path: "/productos"
+        path: "/catalogo"
     },
     {
         element: ProductoDetallePage,
