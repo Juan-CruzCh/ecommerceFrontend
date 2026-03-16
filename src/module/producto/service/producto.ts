@@ -1,6 +1,6 @@
 import type { AxiosResponse } from "axios"
 import { instanceAxios } from "../../../core/config/intanceAxios"
-import type { filtroProductoPublicoI, FormProducto, ImagenesI, ListarProductoPublicoI, ProductoI, VarianteForm, VarianteProductoI } from "../interface/producto"
+import type { filtroProductoPublicoI, FormProducto, ImagenesI, ListarProductoPublicoI, ProductoI } from "../interface/producto"
 
 export async function crearProducto(data: FormProducto): Promise<AxiosResponse> {
     try {
@@ -12,25 +12,17 @@ export async function crearProducto(data: FormProducto): Promise<AxiosResponse> 
     }
 }
 
-export async function crearVarianteProducto(data: VarianteForm): Promise<AxiosResponse> {
-    try {
-        const response = await instanceAxios.post("varianteProducto", data)
-        return response
-    } catch (error) {
-        throw error
 
-    }
-}
-export async function listarImagenes(variante: string): Promise<ImagenesI[]> {
+export async function listarImagenes(producto: string): Promise<ImagenesI[]> {
     try {
-        const response = await instanceAxios.get(`imagenes/${variante}`)
+        const response = await instanceAxios.get(`imagenes/${producto}`)
         return response.data
     } catch (error) {
         throw error
 
     }
 }
-export async function cargarImagenes(imagenes: File[], variante: string, producto: string): Promise<AxiosResponse> {
+export async function cargarImagenes(imagenes: File[], producto: string): Promise<AxiosResponse> {
     try {
         console.log(producto);
 
@@ -38,7 +30,7 @@ export async function cargarImagenes(imagenes: File[], variante: string, product
         imagenes.forEach((file) => {
             formData.append("imagenes", file);
         });
-        formData.append("productoVariante", variante);
+
         formData.append("producto", producto);
 
 
@@ -56,15 +48,7 @@ export async function cargarImagenes(imagenes: File[], variante: string, product
     }
 }
 
-export async function listarVarianteProducto(producto: string): Promise<VarianteProductoI[]> {
-    try {
-        const response = await instanceAxios.get(`varianteProducto/${producto}`)
-        return response.data
-    } catch (error) {
-        throw error
 
-    }
-}
 
 export async function listarProductosPublico(filtro: filtroProductoPublicoI): Promise<ListarProductoPublicoI[]> {
     try {

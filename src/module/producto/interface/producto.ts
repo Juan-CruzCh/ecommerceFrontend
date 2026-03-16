@@ -22,20 +22,7 @@ export interface ProductoI {
     descripcion: string
 }
 
-export interface VarianteForm {
-    talla: string;
-    color: string;
-    producto: string
-}
 
-export interface VarianteProductoI {
-    _id: string;
-    talla: string;
-    color: string;
-    producto: string;
-    fecha: string;
-    flag: string;
-}
 export interface ImagenesI {
     _id: string;
     path: string;

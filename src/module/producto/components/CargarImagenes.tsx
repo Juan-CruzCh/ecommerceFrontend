@@ -7,7 +7,7 @@ import { useEstadoReload } from '../../../core/utils/appUtil'
 import { convertirAWebP } from '../utils/producto'
 import { urlBackend } from '../../../core/config/intanceAxios'
 
-export const CargarImagenes = ({ variante, producto }: { variante: string, producto: string }) => {
+export const CargarImagenes = ({ producto }: { producto: string }) => {
     const [imagenes, setImagenes] = useState<ImagenesI[]>([])
     const [subiendo, setSubiendo] = useState(false)
     const { isReloading, triggerReload } = useEstadoReload()
@@ -19,7 +19,7 @@ export const CargarImagenes = ({ variante, producto }: { variante: string, produ
             const archivosWebP = await Promise.all(
                 archivosOriginales.map(archivo => convertirAWebP(archivo))
             );
-            const response = await cargarImagenes(archivosWebP, variante, producto);
+            const response = await cargarImagenes(archivosWebP, producto);
             if (response.status == HttpStatusCode.Created) {
                 triggerReload()
 
@@ -37,13 +37,13 @@ export const CargarImagenes = ({ variante, producto }: { variante: string, produ
     useEffect(() => {
         (async () => {
             try {
-                const response = await listarImagenes(variante)
+                const response = await listarImagenes(producto)
                 setImagenes(response)
             } catch (error) {
 
             }
         })()
-    }, [isReloading, variante])
+    }, [isReloading, producto])
 
     return (
         <div className="grid grid-cols-4 gap-2">

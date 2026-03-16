@@ -1,7 +1,6 @@
 import React from "react";
 import { Search, Filter, Star, Eye, Edit3, Trash2 } from "lucide-react";
 import { CrearProducto } from "../../producto/modal/CrearProducto";
-import { CrearVarianteProducto } from "../../producto/modal/CrearVarianteProducto";
 
 export const ListarStockPage = () => {
     return (

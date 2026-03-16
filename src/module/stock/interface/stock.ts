@@ -1,7 +1,8 @@
 export interface StockI {
     producto: string
-    varianteProducto: string
+    talla: string
     cantidad: number,
+
 
 
 }
@@ -9,6 +10,9 @@ export interface StockI {
 export interface stockRegistradoI extends StockI {
     nombre: string
     categoria: string
-    talla: string
-    color: string
+    nombreTalla: string
+
+    precioVenta: number
+
+
 }
