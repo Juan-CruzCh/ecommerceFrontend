@@ -1,6 +1,6 @@
 import type { AxiosResponse } from "axios"
 import { instanceAxios } from "../../../core/config/intanceAxios"
-import type { filtroProductoPublicoI, FormProducto, ImagenesI, ListarProductoPublicoI, ProductoI } from "../interface/producto"
+import type { filtroProductoPublicoI, FormProducto, ImagenesI, ListarProductoPublicoI, ProductoDetalle, ProductoI } from "../interface/producto"
 
 export async function crearProducto(data: FormProducto): Promise<AxiosResponse> {
     try {
@@ -24,7 +24,7 @@ export async function listarImagenes(producto: string): Promise<ImagenesI[]> {
 }
 export async function cargarImagenes(imagenes: File[], producto: string): Promise<AxiosResponse> {
     try {
-        console.log(producto);
+      
 
         const formData = new FormData();
         imagenes.forEach((file) => {
@@ -79,6 +79,15 @@ export async function asignarImagenPrincipal(idImagen:string): Promise<AxiosResp
     try {
         const response = await instanceAxios.patch(`producto/asignarImagenPrincipal/${idImagen}`)
         return response
+    } catch (error) {
+        throw error
+
+    }
+}
+export async function detalleProductoPublico(producto:string): Promise<ProductoDetalle> {
+    try {
+        const response = await instanceAxios.get(`producto/publico/detalle/${producto}`)
+        return response.data
     } catch (error) {
         throw error
 

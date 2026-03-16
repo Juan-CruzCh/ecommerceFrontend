@@ -42,3 +42,20 @@ export interface filtroProductoPublicoI {
     destacado?: string
     categoria?: string
 }
+
+
+
+export interface Stock {
+  cantidad: number;
+  idStock: string;
+  productoTalla: string;
+  talla: string;
+}
+
+export interface ProductoDetalle {
+  descripcion: string;
+  imagenes: ImagenesI[];
+  nombre: string;
+  precioVenta: number;
+  stock: Stock[];
+}

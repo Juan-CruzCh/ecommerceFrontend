@@ -67,7 +67,7 @@ export const CatalogoProductoPage = () => {
                                 {/* Overlay que aparece en Hover */}
                                 <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                     <Link
-                                        to={`/producto/${item._id}`}
+                                        to={`/detalle/producto/${item._id}`}
                                         className="bg-white text-zinc-900 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:bg-zinc-900 hover:text-white flex items-center gap-2"
                                     >
                                         <Plus size={12} /> Ver Detalle

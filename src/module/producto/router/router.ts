@@ -9,6 +9,6 @@ export const productosRouter: RouterI[] = [
     },
     {
         element: ProductoDetallePage,
-        path: "/detalle/producto"
+        path: "/detalle/producto/:id"
     }
 ]
