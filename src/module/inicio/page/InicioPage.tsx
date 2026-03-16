@@ -103,7 +103,7 @@ export const InicioPage = () => {
                         <div key={item._id} className="group cursor-pointer">
                             <div className="aspect-[3/4] overflow-hidden bg-zinc-50 mb-6 relative">
                                 <img
-                                    src={`${urlBackend}/${item.imagen}`}
+                                    src={`${urlBackend}/${item.imagenPrincipal}`}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     alt="Producto"
                                 />

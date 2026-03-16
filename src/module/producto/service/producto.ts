@@ -74,3 +74,13 @@ export async function listarProducto(): Promise<ProductoI[]> {
 
     }
 }
+
+export async function asignarImagenPrincipal(idImagen:string): Promise<AxiosResponse> {
+    try {
+        const response = await instanceAxios.patch(`producto/asignarImagenPrincipal/${idImagen}`)
+        return response
+    } catch (error) {
+        throw error
+
+    }
+}

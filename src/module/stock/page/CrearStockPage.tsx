@@ -8,6 +8,7 @@ import { guardarStock } from "../service/stock";
 import { AxiosError, HttpStatusCode } from "axios";
 import { ListarTalla } from "../../talla/components/ListarTallas";
 import type { listarTallaI } from "../../talla/interface/talla";
+import { CrearTalla } from "../../talla/modal/CrearTalla";
 
 export const CrearStockPage = () => {
     const [producto, setProducto] = useState<ProductoI>();
@@ -92,7 +93,7 @@ export const CrearStockPage = () => {
                         </section>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {/* --- PASO 3: SELECCIÓN DE TALLAS --- */}
+                          
                             <div className="bg-white p-6 border border-zinc-200 shadow-sm">
                                 <div className="flex items-center gap-2 mb-6">
                                     <Layers size={16} className="text-zinc-900" />

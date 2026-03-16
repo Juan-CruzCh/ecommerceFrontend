@@ -59,7 +59,7 @@ export const CatalogoProductoPage = () => {
                             {/* Contenedor de Imagen con Overlay */}
                             <div className="relative aspect-[3/4] overflow-hidden bg-zinc-50 mb-5">
                                 <img
-                                    src={`${urlBackend}/${item.imagen}`}
+                                    src={`${urlBackend}/${item.imagenPrincipal}`}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     alt={item.nombre}
                                 />

@@ -25,7 +25,7 @@ export interface ProductoI {
 
 export interface ImagenesI {
     _id: string;
-    path: string;
+    nombre: string;
     principal: boolean
 
 }
@@ -34,7 +34,7 @@ export interface ImagenesI {
 export interface ListarProductoPublicoI {
     _id: string;
     nombre: string
-    imagen: string
+    imagenPrincipal: string
     precioVenta: number
 }
 

@@ -4,13 +4,14 @@ import { X, Maximize, Plus } from 'lucide-react'
 import type { formTalla } from '../interface/talla';
 import { crearTalla } from '../service/talla';
 import { HttpStatusCode } from 'axios';
+import { useEstadoReload } from '../../../core/utils/appUtil';
 
 
 
 export const CrearTalla = () => {
     const [isOpen, setIsOpen] = useState(false);
-
-    // Configuración de react-hook-form
+  const { triggerReload } = useEstadoReload()
+    
     const {
         register,
         handleSubmit,
@@ -22,6 +23,7 @@ export const CrearTalla = () => {
         const response = await crearTalla(data)
 
         if (response.status === HttpStatusCode.Created) {
+            triggerReload()
             reset();
             setIsOpen(false);
         }

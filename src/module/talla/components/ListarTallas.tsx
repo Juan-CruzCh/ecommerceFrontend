@@ -5,6 +5,7 @@ import type { ProductoI } from '../../producto/interface/producto'
 import { useEstadoReload } from '../../../core/utils/appUtil'
 import { listarTallas } from '../service/talla'
 import type { listarTallaI } from '../interface/talla'
+import { CrearTalla } from '../modal/CrearTalla'
 
 export const ListarTalla = ({ setTalla, talla }: { setTalla: (v: listarTallaI) => void, talla?: listarTallaI }) => {
     const [tallas, setTallas] = useState<listarTallaI[]>([])
@@ -23,7 +24,7 @@ export const ListarTalla = ({ setTalla, talla }: { setTalla: (v: listarTallaI) =
 
     return (
         <div className="w-full">
-
+              <CrearTalla/>
 
             <div className="border border-zinc-100 rounded-sm overflow-hidden shadow-sm">
                 <table className="w-full text-left border-collapse bg-white">

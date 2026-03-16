@@ -1,7 +1,7 @@
 import { Plus, X } from 'lucide-react'
 import { useEffect, useState, type ChangeEvent } from 'react'
 import type { ImagenesI } from '../interface/producto'
-import { cargarImagenes, listarImagenes } from '../service/producto'
+import { asignarImagenPrincipal, cargarImagenes, listarImagenes } from '../service/producto'
 import { HttpStatusCode, type AxiosError } from 'axios'
 import { useEstadoReload } from '../../../core/utils/appUtil'
 import { convertirAWebP } from '../utils/producto'
@@ -45,6 +45,17 @@ export const CargarImagenes = ({ producto }: { producto: string }) => {
         })()
     }, [isReloading, producto])
 
+    const imagenPrincial = async (id: string) => {
+        try {
+            const response = await asignarImagenPrincipal(id)
+            if (response.status == HttpStatusCode.Ok) {
+                triggerReload()
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
     return (
         <div className="grid grid-cols-4 gap-2">
 
@@ -55,7 +66,7 @@ export const CargarImagenes = ({ producto }: { producto: string }) => {
                     className="aspect-square border border-zinc-200 relative group bg-zinc-50 overflow-hidden"
                 >
                     <img
-                        src={`${urlBackend}/${img.path}`}
+                        src={`${urlBackend}/${img.nombre}`}
                         className="w-full h-full object-cover"
                     />
 
@@ -68,6 +79,7 @@ export const CargarImagenes = ({ producto }: { producto: string }) => {
 
                     {/* Botón imagen principal */}
                     <button
+                        onClick={() => imagenPrincial(img._id)}
                         className={`absolute bottom-1 left-1 text-[10px] px-2 py-1 rounded 
             ${img.principal ? "bg-green-600 text-white" : "bg-white/80 hover:bg-white"}`}
                     >
