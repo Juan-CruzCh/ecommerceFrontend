@@ -1,6 +1,13 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
+import { autenticacion } from '../service/autenticacion';
+import { AxiosError, HttpStatusCode } from 'axios';
+
+interface AutenticacionI {
+  usuario: string
+  password: string
+}
 
 export const AutenticacionPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -8,12 +15,28 @@ export const AutenticacionPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm();
+    formState: { errors },
+    setError
+  } = useForm<AutenticacionI>();
 
-  const onSubmit = (data: any) => {
-    // Lógica de validación privada
-    console.log("Intento de acceso privado:", data);
+  const onSubmit = async (data: AutenticacionI) => {
+    try {
+      const response = await autenticacion(data.usuario, data.password)
+      if (response.status == HttpStatusCode.Ok) {
+        window.location.href = '/inicio'
+      }
+    } catch (error) {
+      const e = error as AxiosError<any>
+      if (e.status == HttpStatusCode.Unauthorized) {
+        setError("password", { type: "manual", message: e.response?.data.mensaje })
+      } else {
+        setError("password", { type: "manual", message: e.message })
+      }
+
+
+
+    }
+
   };
 
   return (
@@ -38,11 +61,14 @@ export const AutenticacionPage = () => {
               </div>
               <input
                 type="text"
-                {...register("username", { required: "Requerido" })}
+                {...register("usuario", { required: "Requerido" })}
                 className="block w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-50 focus:border-pink-200 transition-all placeholder:text-gray-300"
                 placeholder="Nombre de usuario"
               />
             </div>
+            {errors.usuario && (
+              <p className="text-red-500 text-[10px] mt-1">{errors.usuario.message}</p>
+            )}
           </div>
 
           {/* Contraseña */}
@@ -58,6 +84,9 @@ export const AutenticacionPage = () => {
                 className="block w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-50 focus:border-pink-200 transition-all placeholder:text-gray-300"
                 placeholder="••••••••"
               />
+              {errors.password && (
+                <p className="text-red-500 text-[10px] mt-1">{errors.password.message}</p>
+              )}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}

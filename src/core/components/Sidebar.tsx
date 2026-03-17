@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import {
-    LayoutDashboard, Package, Users, ChevronDown,
-    PlusCircle, List, ShoppingCart, X, Menu, LogOut
+    LayoutDashboard, Package, Users, ChevronDown, ShoppingCart, X, Menu, LogOut
 } from 'lucide-react';
+import { cerraSession } from '../../module/autenticacion/service/autenticacion';
+import { Await } from 'react-router';
+import { HttpStatusCode } from 'axios';
 
-// --- INTERFACES ---
+
 interface NavItemProps {
     icon: React.ReactNode;
     label: string;
@@ -14,17 +16,17 @@ interface NavItemProps {
     onClick?: () => void;
 }
 
-// --- COMPONENTE PRINCIPAL ---
+
 export const Sidebar: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const [isInventoryOpen, setIsInventoryOpen] = useState<boolean>(false);
-
-    // Puedes cambiar esto por la lógica de tu Router para detectar la página actual
     const currentPath = window.location.pathname;
+
+
 
     return (
         <>
-            {/* BOTÓN HAMBURGUESA: Aparece solo cuando el sidebar está cerrado */}
+        
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
@@ -34,12 +36,12 @@ export const Sidebar: React.FC = () => {
                 </button>
             )}
 
-            {/* SIDEBAR: min-h-screen para que siempre ocupe todo el alto disponible */}
+          
             <aside
                 className={`relative flex flex-col min-h-screen z-50 transition-all duration-300 border-r border-gray-100 bg-white ${isOpen ? 'w-64' : 'w-0 -translate-x-full overflow-hidden'
                     }`}
             >
-                {/* HEADER: Logo y botón de cerrar */}
+          
                 {isOpen && (
                     <div className="flex items-center justify-between px-6 h-20">
                         <span className="text-xl font-bold text-gray-800 tracking-tight">
@@ -54,7 +56,7 @@ export const Sidebar: React.FC = () => {
                     </div>
                 )}
 
-                {/* CUERPO: Navegación principal */}
+               
                 {isOpen && (
                     <div className="flex-1 px-3 mt-2">
                         <nav className="space-y-1">
@@ -115,7 +117,7 @@ export const Sidebar: React.FC = () => {
                     </div>
                 )}
 
-                {/* FOOTER: Información de Usuario */}
+
                 {isOpen && (
                     <div className="p-4 border-t border-gray-50">
                         <div className="flex items-center justify-between gap-3 px-2">
@@ -128,7 +130,20 @@ export const Sidebar: React.FC = () => {
                                     <p className="text-[10px] text-gray-400 mt-1">En línea</p>
                                 </div>
                             </div>
-                            <button title="Cerrar Sesión" className="text-gray-300 hover:text-rose-500 transition-colors">
+                            <button 
+                            
+                            title="Cerrar Sesión" 
+                            onClick={async()=>{
+                                try {
+                                    const response = await cerraSession()
+                                    if(response.status == HttpStatusCode.Ok){
+                                        window.location.href = '/autenticacion'
+                                    }
+                                } catch (error) {
+                                    
+                                }
+                            }}
+                            className="text-gray-300 hover:text-rose-500 transition-colors">
                                 <LogOut size={16} />
                             </button>
                         </div>
@@ -139,7 +154,6 @@ export const Sidebar: React.FC = () => {
     );
 };
 
-// --- COMPONENTE AUXILIAR NavItem ---
 const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, href, onClick }) => (
     <a
         href={href}
