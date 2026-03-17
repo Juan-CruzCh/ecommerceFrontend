@@ -8,11 +8,10 @@ import { guardarStock } from "../service/stock";
 import { AxiosError, HttpStatusCode } from "axios";
 import { ListarTalla } from "../../talla/components/ListarTallas";
 import type { listarTallaI } from "../../talla/interface/talla";
-import { CrearTalla } from "../../talla/modal/CrearTalla";
 
 export const CrearStockPage = () => {
     const [producto, setProducto] = useState<ProductoI>();
-    const [talla, setTalla] = useState<listarTallaI>({ _id: "", nombre: "" });
+    const [talla, setTalla] = useState<listarTallaI>();
     const [cantidad, setCantidad] = useState<number>(1);
     const [stockRegistrado, setStockRegistrado] = useState<stockRegistradoI[]>([]);
 
@@ -29,7 +28,6 @@ export const CrearStockPage = () => {
 
             };
             setStockRegistrado([...stockRegistrado, nuevoItem]);
-            setTalla({ _id: "", nombre: "" });
             setCantidad(1);
         }
     };
@@ -106,7 +104,7 @@ export const CrearStockPage = () => {
                                     <h2 className="text-xs font-black uppercase tracking-widest text-zinc-900">4. Definir Cantidad</h2>
                                 </div>
 
-                                {talla ? (
+                                {talla  ? (
                                     <div className="space-y-6">
                                         <div>
                                             <label className="text-[10px] font-black uppercase text-zinc-400 block mb-2 tracking-widest">Unidades a ingresar</label>
@@ -120,7 +118,7 @@ export const CrearStockPage = () => {
                                                 />
                                                 <button
                                                     onClick={anadirResumen}
-                                                    className="bg-zinc-900 text-white px-10 py-4 text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95"
+                                                    className="bg-zinc-900 text-white  py-4 text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95"
                                                 >
                                                     Añadir Item
                                                 </button>

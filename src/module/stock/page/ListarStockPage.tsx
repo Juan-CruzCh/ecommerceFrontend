@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Search, Filter, Star, Eye, Edit3, Trash2 } from "lucide-react";
 import { CrearProducto } from "../../producto/modal/CrearProducto";
+import { ListarStock } from "../service/stock";
 
 export const ListarStockPage = () => {
+    useEffect(()=>{
+        (async()=>{
+            try {
+                await ListarStock()
+            } catch (error) {
+                
+            }
+        })()
+    },[])
     return (
         <div className="min-h-screen bg-white text-zinc-800 font-sans p-8">
             <div className="max-w-[1400px] mx-auto">
