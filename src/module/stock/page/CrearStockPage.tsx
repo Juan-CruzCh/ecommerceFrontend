@@ -56,7 +56,7 @@ export const CrearStockPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#fafafa] text-zinc-800 font-sans">
+        <div className="min-h-screen  text-zinc-800 font-sans">
             <div className="max-w-[1600px] mx-auto px-6 py-8">
 
                 <header className="flex justify-between items-end mb-10 border-b border-zinc-200 pb-6">
@@ -64,10 +64,7 @@ export const CrearStockPage = () => {
                         <h1 className="text-2xl font-black uppercase tracking-tighter text-zinc-900">Entrada de Stock</h1>
                         <p className="text-xs text-zinc-500 font-medium">Gestión secuencial de inventario.</p>
                     </div>
-                    <div className="text-right">
-                        <p className="text-[10px] font-bold text-zinc-400 uppercase">Items en cola</p>
-                        <p className="text-xl font-black text-zinc-900">{stockRegistrado.length}</p>
-                    </div>
+
                 </header>
 
                 {/* --- PASO 1: SELECCIÓN DE PRODUCTO --- */}
@@ -93,7 +90,7 @@ export const CrearStockPage = () => {
                         </section>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                          
+
                             <div className="bg-white p-6 border border-zinc-200 shadow-sm">
                                 <div className="flex items-center gap-2 mb-6">
                                     <Layers size={16} className="text-zinc-900" />

@@ -21,7 +21,6 @@ export function Menu() {
         { name: "Contactos", href: "/contactos" },
     ];
 
-    const categories = ["Polleras", "Blusas", "Mantas", "Sombreros"];
 
     return (
         <header className="sticky top-0 w-full z-50 shadow-md">
@@ -68,27 +67,7 @@ export function Menu() {
                                 </a>
                             ))}
 
-                            {/* Dropdown Categorías */}
-                            <div className="relative group cursor-pointer py-2">
-                                <button className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] hover:text-zinc-900 transition-colors">
-                                    Categorías
-                                    <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
-                                </button>
 
-                                <div className="absolute right-0 md:left-0 mt-4 w-52 bg-white border border-zinc-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                                    <div className="py-2">
-                                        {categories.map((cat) => (
-                                            <a
-                                                key={cat}
-                                                href="#"
-                                                className="block px-6 py-3 text-[#D68B8F] text-xs font-bold uppercase tracking-widest hover:bg-pink-50 transition-colors"
-                                            >
-                                                {cat}
-                                            </a>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         {/* Iconos de Acción (Carrito y Menu Móvil) */}
@@ -126,19 +105,7 @@ export function Menu() {
                                 {link.name}
                             </a>
                         ))}
-                        <div className="pt-6 border-t border-white/20 flex flex-col gap-5">
-                            <span className="text-white/60 text-[10px] uppercase tracking-[0.3em]">Categorías</span>
-                            {categories.map((cat) => (
-                                <a
-                                    key={cat}
-                                    href="#"
-                                    className="text-white hover:text-zinc-900 transition-colors"
-                                    onClick={() => setOpen(false)}
-                                >
-                                    {cat}
-                                </a>
-                            ))}
-                        </div>
+
                     </div>
                 </div>
             </nav>

@@ -1,7 +1,12 @@
 import type { RouterI } from "../../../core/interface/router";
+import { ListarUsuarioPage } from "../page/ListarUsuarioPage";
 
-export const stockRouter: RouterI[] = [
+export const usuarioRouter: RouterI[] = [
 
+    {
+        element: ListarUsuarioPage,
+        path: "/usuarios"
+    }
 
 
 ]
