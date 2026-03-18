@@ -16,3 +16,13 @@ export interface stockRegistradoI extends StockI {
 
 
 }
+export interface StockProducto {
+    _id: string
+    cantidad: number
+    imagen: string
+    categoria: string
+    codigo: string
+    producto: string
+    talla: string
+    descripcion: string
+}

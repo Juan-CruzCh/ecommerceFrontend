@@ -5,7 +5,8 @@ export const usuarioRouter: RouterI[] = [
 
     {
         element: ListarUsuarioPage,
-        path: "/usuarios"
+        path: "/usuarios",
+        protegida: true,
     }
 
 

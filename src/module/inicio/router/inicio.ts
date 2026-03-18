@@ -7,18 +7,27 @@ import { NosotrosPage } from "../page/NosotrosPage";
 export const inicioRouter: RouterI[] = [
     {
         element: InicioPage,
-        path: "/"
+        path: "/",
+        protegida: false,
+
     },
     {
         element: NosotrosPage,
-        path: "/nosotros"
+        path: "/nosotros",
+        protegida: false,
+
+
     },
     {
         element: ContactoPage,
-        path: "/contactos"
+        path: "/contactos",
+        protegida: false,
+
     },
     {
         element: DashboarPage,
-        path: "/inicio"
+        path: "/inicio",
+        protegida: false,
+
     }
 ]

@@ -4,11 +4,13 @@ import { ListarStockPage } from "../page/ListarStockPage";
 export const stockRouter: RouterI[] = [
     {
         element: CrearStockPage,
-        path: "/registrarStock"
+        path: "/registrarStock",
+        protegida: true,
     },
     {
         element: ListarStockPage,
-        path: "/listarStock"
+        path: "/listarStock",
+        protegida: true,
     }
 
 ]

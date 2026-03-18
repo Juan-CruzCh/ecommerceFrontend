@@ -5,10 +5,12 @@ import { ProductoDetallePage } from "../page/DetalleProductoPage";
 export const productosRouter: RouterI[] = [
     {
         element: CatalogoProductoPage,
-        path: "/catalogo"
+        path: "/catalogo",
+        protegida: false,
     },
     {
         element: ProductoDetallePage,
-        path: "/detalle/producto/:id"
+        path: "/detalle/producto/:id",
+        protegida: false,
     }
 ]

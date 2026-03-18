@@ -4,7 +4,8 @@ import { AutenticacionPage } from "../page/AutenticacionPage";
 export const autenticacionRouter: RouterI[] = [
     {
         element: AutenticacionPage,
-        path: "/autenticacion"
+        path: "/autenticacion",
+        protegida: false,
     }
 
 ]
