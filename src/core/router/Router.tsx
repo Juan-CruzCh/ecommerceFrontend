@@ -7,6 +7,7 @@ import { productosRouter } from "../../module/producto/router/router";
 import { stockRouter } from "../../module/stock/router/router";
 import { usuarioRouter } from "../../module/usuario/router/router";
 import { autenticacionRouter } from "../../module/autenticacion/router/autenticacion";
+import { ventaRouter } from "../../module/venta/router/router";
 
 const renderRoutes = (routes: RouterI[]) =>
   routes.map((item, index) => (
@@ -27,6 +28,7 @@ export const AppRouter = () => {
           {renderRoutes(inicioRouter)}
           {renderRoutes(stockRouter)}
           {renderRoutes(usuarioRouter)}
+          {renderRoutes(ventaRouter)}
 
         </Route>
 
