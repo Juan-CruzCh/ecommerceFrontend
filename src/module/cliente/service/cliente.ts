@@ -3,18 +3,31 @@ import type { clienteForm, listarClienteI } from "../interface/cliente"
 import { instanceAxios } from "../../../core/config/intanceAxios"
 import type { httpResponse } from "../../../core/interface/core"
 
-export async function crearCliente(data: clienteForm): Promise<AxiosResponse> {
+export async function crearCliente(data: clienteForm): Promise<listarClienteI> {
     try {
         const response = await instanceAxios.post(`cliente`, data)
-        return response
+        return response.data
     } catch (error) {
         throw error
 
     }
 }
-export async function listarClientes(): Promise<httpResponse<listarClienteI>> {
+export async function listarClientes(codigo:string, ci:string , nombre:string, apellidos:string, celular:string, direccion:string, pagina:number): Promise<httpResponse<listarClienteI>> {
     try {
-        const response = await instanceAxios.get(`cliente`)
+        const response = await instanceAxios.get(`cliente`,
+            {
+                params:{
+                    codigo,
+                    apellidos,
+                    ci,
+                    nombre, 
+                    celular,
+                    direccion,
+                    pagina
+
+                }
+            }
+        )
         return response.data
     } catch (error) {
         throw error

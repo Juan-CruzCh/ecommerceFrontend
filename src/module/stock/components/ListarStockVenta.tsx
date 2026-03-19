@@ -3,8 +3,9 @@ import { Search, Check } from "lucide-react"; // Añadí Check para el icono
 import { ListarStocks } from "../service/stock";
 import type { StockProducto } from "../interface/stock";
 import { urlBackend } from "../../../core/config/intanceAxios";
+import type { carritoI } from "../../venta/interface/venta";
 
-export const ListarStockVenta = () => {
+export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carritoI[]) => void, carrito: carritoI[] }) => {
     const [stocks, setStock] = useState<StockProducto[]>([]);
     const [totalPaginas, setTotalPaginas] = useState<number>(0);
     const [paginaActual, setPaginaActual] = useState<number>(1);
@@ -89,6 +90,27 @@ export const ListarStockVenta = () => {
                                     </td>
                                     <td className="p-4 text-center">
                                         <button
+                                            onClick={() => {
+                                                const ca: carritoI = {
+                                                    cantidad: 1,
+                                                    nombre: item.producto,
+                                                    precio: 3,
+                                                    stock: item._id
+                                                }
+                                                const itemExistente = carrito.find((c) => c.stock === item._id);
+                                                if (itemExistente) {
+                                                    const nuevoCarrito = carrito.map((c) =>
+                                                        c.stock === item._id
+                                                            ? { ...c, cantidad: c.cantidad + 1 }
+                                                            : c
+                                                    );
+                                                    setCarrito(nuevoCarrito);
+
+                                                } else {
+                                                    setCarrito([...carrito, ca])
+                                                }
+
+                                            }}
                                             className="inline-flex items-center gap-2 border border-zinc-900 px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-zinc-900 hover:text-white transition-all transform active:scale-95 shadow-sm"
                                         >
                                             <Check size={12} />

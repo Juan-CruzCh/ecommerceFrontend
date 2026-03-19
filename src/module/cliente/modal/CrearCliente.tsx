@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import type { clienteForm } from '../interface/cliente';
+import type { clienteForm, listarClienteI } from '../interface/cliente';
 import { crearCliente } from '../service/cliente';
 import { HttpStatusCode } from 'axios';
 
-export const CrearCliente = () => {
+export const CrearCliente = ({setCliente}:{setCliente:(v:listarClienteI)=>void}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm<clienteForm>();
@@ -12,8 +12,8 @@ export const CrearCliente = () => {
     const onSubmit = async (data: clienteForm) => {
         try {
             const response = await crearCliente(data)
-            if (response.status == HttpStatusCode.Created) {
-
+            if (response) {
+                setCliente(response)
                 setIsOpen(false);
                 reset();
             }
