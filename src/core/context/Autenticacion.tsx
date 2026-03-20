@@ -10,8 +10,7 @@ interface AutenticacionI {
     verificarAuth: () => Promise<void>;
 }
 
-const rutasPulica: string[] = ["/", "/catalogo", "/detalle/producto/:id"]
-
+const rutasPulica: string[] = ["/", "/autenticacion", "/catalogo", "/detalle/producto/:id"]
 export const useAutenticacionStore = create<AutenticacionI>((set) => ({
     apellidos: '',
     isAutenticacion: false,
@@ -30,6 +29,8 @@ export const useAutenticacionStore = create<AutenticacionI>((set) => ({
             });
             if (!esPublica) {
                 const response = await verificarAutenticacion();
+                console.log(response);
+
                 if (response) {
                     set({
                         usuario: "",

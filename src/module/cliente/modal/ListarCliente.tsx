@@ -3,7 +3,7 @@ import { listarClientes } from '../service/cliente';
 import type { listarClienteI } from '../interface/cliente';
 import type { AxiosError } from 'axios';
 
-export const ListarCliente = ({setCliente}:{setCliente:(v:listarClienteI) => void}) => {
+export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) => void }) => {
     const [clientes, setclientes] = useState<listarClienteI[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [codigoFilter, setCodigoFilter] = useState('');
@@ -18,9 +18,7 @@ export const ListarCliente = ({setCliente}:{setCliente:(v:listarClienteI) => voi
         if (isOpen) {
             (async () => {
                 try {
-                    const response = await listarClientes(codigoFilter, celularFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, paginas)
-                  console.log(response);
-                  
+                    const response = await listarClientes(codigoFilter, ciFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, paginas)
                     setclientes(response.data)
                     setPaginas(response.paginas)
                 } catch (error) {
@@ -30,7 +28,7 @@ export const ListarCliente = ({setCliente}:{setCliente:(v:listarClienteI) => voi
                 }
             })()
         }
-    }, [isOpen, codigoFilter, celularFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, paginas])
+    }, [isOpen, ciFilter, codigoFilter, celularFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, paginas])
 
     return (
         <>
@@ -96,10 +94,10 @@ export const ListarCliente = ({setCliente}:{setCliente:(v:listarClienteI) => voi
                                             <td className="px-3 py-2.5 border-r border-gray-100 text-gray-500 truncate max-w-[150px]">{c.direccion}</td>
                                             <td className="px-3 py-2.5 text-center">
                                                 <button
-                                                onClick={()=> {
-                                                    setCliente(c)
-                                                    setIsOpen(false)
-                                                }}
+                                                    onClick={() => {
+                                                        setCliente(c)
+                                                        setIsOpen(false)
+                                                    }}
                                                     className="bg-white border border-black px-3 py-1 text-[9px] font-black uppercase hover:bg-black hover:text-white transition-all transform active:scale-95"
                                                 >
                                                     Seleccionar

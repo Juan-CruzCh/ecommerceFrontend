@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import type { RouterI } from "../interface/router"
 
 import { MainLayout } from "../components/MainLayout";
@@ -8,13 +8,30 @@ import { stockRouter } from "../../module/stock/router/router";
 import { usuarioRouter } from "../../module/usuario/router/router";
 import { autenticacionRouter } from "../../module/autenticacion/router/autenticacion";
 import { ventaRouter } from "../../module/venta/router/router";
+import { useAutenticacionStore } from "../context/Autenticacion";
 
-const renderRoutes = (routes: RouterI[]) =>
-  routes.map((item, index) => (
-    <Route key={index} path={item.path} element={< item.element />} />
-  ));
+const renderRoutes = (routes: RouterI[], isAuthenticated: boolean) =>
+  routes.map((item, index) => {
+    if (!item.protegida) {
+      return <Route key={index} path={item.path} element={<item.element />} />;
+    }
+    return (
+      <Route
+        key={index}
+        path={item.path}
+        element={
+          isAuthenticated ? (
+            <item.element />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+    );
+  });
 export const AppRouter = () => {
-
+  const { isAutenticacion } = useAutenticacionStore()
+  console.log(isAutenticacion);
 
   return (
 
@@ -23,12 +40,12 @@ export const AppRouter = () => {
 
         {/* Layout */}
         < Route element={< MainLayout />}>
-          {renderRoutes(productosRouter)}
-          {renderRoutes(autenticacionRouter)}
-          {renderRoutes(inicioRouter)}
-          {renderRoutes(stockRouter)}
-          {renderRoutes(usuarioRouter)}
-          {renderRoutes(ventaRouter)}
+          {renderRoutes(productosRouter, isAutenticacion)}
+          {renderRoutes(autenticacionRouter, isAutenticacion)}
+          {renderRoutes(inicioRouter, isAutenticacion)}
+          {renderRoutes(stockRouter, isAutenticacion)}
+          {renderRoutes(usuarioRouter, isAutenticacion)}
+          {renderRoutes(ventaRouter, isAutenticacion)}
 
         </Route>
 

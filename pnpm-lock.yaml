@@ -29,6 +29,9 @@ importers:
       react-router:
         specifier: ^7.13.1
         version: 7.13.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      sweetalert2:
+        specifier: ^11.26.23
+        version: 11.26.23
       tailwindcss:
         specifier: ^4.2.1
         version: 4.2.1
@@ -1233,6 +1236,9 @@ packages:
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
+
+  sweetalert2@11.26.23:
+    resolution: {integrity: sha512-6Y6Auvk/gLUcVtPHWhDkJs+JCDraxAWNdITdIbOqeo3mZthVZT3XfDjrxcSHtElUz7DmF21oEqUCW2eWR15eDA==}
 
   tailwindcss@4.2.1:
     resolution: {integrity: sha512-/tBrSQ36vCleJkAOsy9kbNTgaxvGbyOamC30PRePTQe/o1MFwEKHQk4Cn7BNGaPtjp+PuUrByJehM1hgxfq4sw==}
@@ -2443,6 +2449,8 @@ snapshots:
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
+
+  sweetalert2@11.26.23: {}
 
   tailwindcss@4.2.1: {}
 

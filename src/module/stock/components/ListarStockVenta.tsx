@@ -55,6 +55,7 @@ export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carr
                                 <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Categoría</th>
                                 <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Talla</th>
                                 <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Stock</th>
+                                <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Precio</th>
                                 <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Acción</th>
                             </tr>
                         </thead>
@@ -89,13 +90,20 @@ export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carr
                                         </span>
                                     </td>
                                     <td className="p-4 text-center">
+                                        <span className="text-xs font-bold font-mono text-zinc-800">
+                                            {item.precioVenta}
+                                        </span>
+                                    </td>
+                                    <td className="p-4 text-center">
                                         <button
                                             onClick={() => {
                                                 const ca: carritoI = {
                                                     cantidad: 1,
                                                     nombre: item.producto,
-                                                    precio: 3,
-                                                    stock: item._id
+                                                    precio: item.precioVenta,
+                                                    stock: item._id,
+                                                    codigo: item.codigo,
+                                                    talla: item.talla
                                                 }
                                                 const itemExistente = carrito.find((c) => c.stock === item._id);
                                                 if (itemExistente) {

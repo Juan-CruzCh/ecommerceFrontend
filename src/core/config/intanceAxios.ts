@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export const urlBackend = import.meta.env.VITE_API_BACKEND
 
@@ -18,6 +18,11 @@ instanceAxios.interceptors.response.use(
         return response;
     },
     (error) => {
+
+        const e = error as AxiosError<any>
+        console.log(e);
+
+
         return Promise.reject(error);
     }
 );

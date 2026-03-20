@@ -25,4 +25,5 @@ export interface StockProducto {
     producto: string
     talla: string
     descripcion: string
+    precioVenta: number
 }

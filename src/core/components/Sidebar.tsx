@@ -20,13 +20,14 @@ interface NavItemProps {
 export const Sidebar: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const [isInventoryOpen, setIsInventoryOpen] = useState<boolean>(false);
+    const [isVenta, setIsVenta] = useState<boolean>(false);
     const currentPath = window.location.pathname;
 
 
 
     return (
         <>
-        
+
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
@@ -36,12 +37,12 @@ export const Sidebar: React.FC = () => {
                 </button>
             )}
 
-          
+
             <aside
                 className={`relative flex flex-col min-h-screen z-50 transition-all duration-300 border-r border-gray-100 bg-white ${isOpen ? 'w-64' : 'w-0 -translate-x-full overflow-hidden'
                     }`}
             >
-          
+
                 {isOpen && (
                     <div className="flex items-center justify-between px-6 h-20">
                         <span className="text-xl font-bold text-gray-800 tracking-tight">
@@ -56,7 +57,7 @@ export const Sidebar: React.FC = () => {
                     </div>
                 )}
 
-               
+
                 {isOpen && (
                     <div className="flex-1 px-3 mt-2">
                         <nav className="space-y-1">
@@ -71,13 +72,30 @@ export const Sidebar: React.FC = () => {
                             />
 
                             {/* Ventas */}
-                            <NavItem
-                                icon={<ShoppingCart size={20} />}
-                                label="Ventas"
-                                isOpen={isOpen}
-                                href="/ventas"
-                                isActive={currentPath === '/ventas'}
-                            />
+                            <div className="flex flex-col">
+                                <button
+                                    onClick={() => setIsVenta(!isVenta)}
+                                    className={`flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${isInventoryOpen ? 'text-pink-600 bg-pink-50/50' : 'text-gray-500 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <Package size={20} />
+                                        <span>Ventas</span>
+                                    </div>
+                                    <ChevronDown size={14} className={`transition-transform duration-200 ${isInventoryOpen ? 'rotate-180' : ''}`} />
+                                </button>
+
+                                {isVenta && (
+                                    <div className="mt-1 ml-11 flex flex-col space-y-1 animate-in slide-in-from-top-1 duration-200">
+                                        <a href="/realizarVenta" className="text-sm py-2 text-gray-400 hover:text-pink-600 transition-colors">
+                                            Realizar venta
+                                        </a>
+                                        <a href="/listarVenta" className="text-sm py-2 text-gray-400 hover:text-pink-600 transition-colors">
+                                            Listar venta
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
 
                             {/* Grupo de Inventario con Submenú */}
                             <div className="flex flex-col">
@@ -130,20 +148,20 @@ export const Sidebar: React.FC = () => {
                                     <p className="text-[10px] text-gray-400 mt-1">En línea</p>
                                 </div>
                             </div>
-                            <button 
-                            
-                            title="Cerrar Sesión" 
-                            onClick={async()=>{
-                                try {
-                                    const response = await cerraSession()
-                                    if(response.status == HttpStatusCode.Ok){
-                                        window.location.href = '/autenticacion'
+                            <button
+
+                                title="Cerrar Sesión"
+                                onClick={async () => {
+                                    try {
+                                        const response = await cerraSession()
+                                        if (response.status == HttpStatusCode.Ok) {
+                                            window.location.href = '/autenticacion'
+                                        }
+                                    } catch (error) {
+
                                     }
-                                } catch (error) {
-                                    
-                                }
-                            }}
-                            className="text-gray-300 hover:text-rose-500 transition-colors">
+                                }}
+                                className="text-gray-300 hover:text-rose-500 transition-colors">
                                 <LogOut size={16} />
                             </button>
                         </div>
