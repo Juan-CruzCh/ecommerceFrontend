@@ -13,8 +13,8 @@ export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) 
     const [apellidosFilter, setApellidosFilter] = useState('');
     const [celularFilter, setCelularFilter] = useState('');
     const [direccionFilter, setDireccionFilter] = useState('');
-    const [paginas, setPaginas] = useState(0);
-    const [pagina, setPagina] = useState(0);
+    const [paginas, setPaginas] = useState(1);
+    const [pagina, setPagina] = useState(1);
 
     useEffect(() => {
         if (isOpen) {

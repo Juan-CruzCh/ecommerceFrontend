@@ -11,7 +11,7 @@ export interface carritoI {
 
 export interface RealizarVentaI {
     cliente: string
-    detalleVenta: { cantidad: number, stock: string }[]
+    detalleVenta: { cantidad: number, stock: string , talla:string}[]
 }
 
 export interface listarVentaI {
@@ -34,7 +34,7 @@ export interface Detalle {
   _id: string;
   cantidad: number;
   descripcion: string;
-  imagen: ImagenesI[];
+  imagen:string;
   precioTotal: number;
   precioUnitario: number;
 }
@@ -45,8 +45,10 @@ export interface Venta {
   _id: string;
   apellidos: string;
   codigo: string;
-  fechaFinalizado: string; // o Date
-  fechaPedido: string;     // o Date
+  direccion:string
+  celular:string
+  fechaFinalizado: string; 
+  fechaPedido: string;     
   nombre: string;
   total: number;
   totalConDescuento: number;

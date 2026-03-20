@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type { clienteForm, listarClienteI } from '../interface/cliente';
 import { crearCliente } from '../service/cliente';
-import { HttpStatusCode } from 'axios';
+import { AxiosError, HttpStatusCode } from 'axios';
+import { mostrarError } from '../../venta/utils/alertas';
 
-export const CrearCliente = ({setCliente}:{setCliente:(v:listarClienteI)=>void}) => {
+export const CrearCliente = ({ setCliente }: { setCliente: (v: listarClienteI) => void }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm<clienteForm>();
@@ -18,7 +19,8 @@ export const CrearCliente = ({setCliente}:{setCliente:(v:listarClienteI)=>void})
                 reset();
             }
         } catch (error) {
-            console.log(error);
+            const e = error as AxiosError<any>;
+            mostrarError(e.response?.data.mensaje)
 
         }
     };

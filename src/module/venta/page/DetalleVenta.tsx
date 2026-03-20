@@ -1,62 +1,51 @@
-import React from 'react';
-import { ShoppingCart, Package } from 'lucide-react';
+import  { useEffect, useState } from 'react';
+import {  Package } from 'lucide-react';
+import { useParams } from 'react-router';
+import { detalleVentas } from '../service/venta';
+import type { DetalleVentaI } from '../interface/venta';
+import { urlImagen } from '../../../core/config/intanceAxios';
 
 export const DetalleVenta = () => {
-    const venta = {
-        _id: "69bca6ffa410da3f43bc5606",
-        codigo: "VEN-ECO-1253",
-        fechaPedido: "2026-03-19",
-        tracking: "FINALIZADO",
-        total: 130,
-        asesor: "ROSARIO Carballo"
-    };
+    const {id}=useParams()
+    const [venta, setVenta]=useState<DetalleVentaI>()
+  
 
-    const cliente = {
-        nombre: "MAURICIO NICOLAS BARRANCO CARRASCO",
-        celular: "72884186",
-        direccion: "URRIOLAGOITIA 260",
-    };
-
-    // Simulando múltiples productos con imágenes
-    const detalles = [
-        {
-            producto: "INSUMO: GENERICA / TORNILLO GUIA /",
-            imagen: "https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=100", // Imagen simulada
-            cantidad: 1,
-            precioUnitario: 65,
-            subtotal: 65,
-            entregado: false
-        },
-        {
-            producto: "PIEZA DENTAL: PREMOLAR SUPERIOR TIPO A",
-            imagen: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=100", // Imagen simulada
-            cantidad: 1,
-            precioUnitario: 65,
-            subtotal: 65,
-            entregado: true
-        }
-    ];
-
+     useEffect(() => {
+           if(id){
+             (async () => {
+                try {
+                    const response = await detalleVentas(id)
+                    setVenta(response)
+                } catch (error) {
+                    console.log(error);
+    
+                }
+            })()
+           }
+        }, [id])
     return (
         <div className="bg-white p-6 md:p-10 max-w-5xl mx-auto my-10 font-sans text-black border border-slate-100 shadow-2xl">
 
-            {/* Header: Diseño Limpio */}
+           {
+            venta && (
+            <>
+             {/* Header: Diseño Limpio */}
             <div className="flex flex-col md:flex-row justify-between mb-12 gap-8 border-b border-slate-100 pb-10">
                 <div className="space-y-4">
                     <div>
                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Cliente</p>
-                        <h2 className="text-xl font-bold uppercase leading-tight">{cliente.nombre}</h2>
+                        <h2 className="text-xl font-bold uppercase leading-tight">{venta.venta.nombre}</h2>
                     </div>
                     <div className="text-sm space-y-1 text-slate-600">
-                        <p className="font-medium">CEL: {cliente.celular}</p>
-                        <p className="font-medium uppercase">{cliente.direccion}</p>
+                        <p className="font-medium">CEL: {venta.venta.celular}</p>
+                        <p className="font-medium uppercase">{venta.venta.direccion}</p>
                     </div>
                 </div>
 
                 <div className="md:text-right space-y-2">
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Comprobante de Venta</p>
-                    <h1 className="text-2xl font-light tracking-tighter uppercase">ID: {venta.codigo}</h1>
-                    <p className="text-xs font-mono text-slate-400">Order Ref: {venta._id.slice(-10)}</p>
+                    <h1 className="text-2xl font-light tracking-tighter uppercase">ID: {venta.venta.codigo}</h1>
+                    <p className="text-xs font-mono text-slate-400">Order Ref: {venta.venta._id}</p>
                 </div>
             </div>
 
@@ -81,14 +70,14 @@ export const DetalleVenta = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {detalles.map((item, index) => (
+                            {venta.detalle.map((item, index) => (
                                 <tr key={index} className="group hover:bg-slate-50 transition-colors">
                                     <td className="py-6 px-2">
                                         {/* IMAGEN DEL PRODUCTO */}
                                         <div className="w-16 h-16 border border-slate-200 overflow-hidden bg-slate-50 grayscale hover:grayscale-0 transition-all">
                                             <img
-                                                src={item.imagen}
-                                                alt={item.producto}
+                                                src={`${urlImagen}/${item.imagen}`}
+                                                alt={item.imagen}
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
@@ -96,14 +85,14 @@ export const DetalleVenta = () => {
                                     <td className="py-6 pr-4">
                                         <div className="flex flex-col">
                                             <span className="text-[10px] font-bold text-slate-400 mb-1">
-                                                {item.entregado ? '✓ ENTREGADO' : '○ PENDIENTE'}
+                                                {venta.venta.tracking}
                                             </span>
-                                            <span className="text-sm font-bold uppercase leading-snug">{item.producto}</span>
+                                            <span className="text-sm font-bold uppercase leading-snug">{item.descripcion}</span>
                                         </div>
                                     </td>
                                     <td className="py-6 text-center text-sm font-medium">{item.cantidad}</td>
-                                    <td className="py-6 text-right text-sm font-medium italic">${item.precioUnitario}</td>
-                                    <td className="py-6 text-right px-2 text-sm font-black">${item.subtotal}</td>
+                                    <td className="py-6 text-right text-sm font-medium italic">{item.precioUnitario} Bs</td>
+                                    <td className="py-6 text-right px-2 text-sm font-black">{item.precioTotal} Bs</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -116,22 +105,22 @@ export const DetalleVenta = () => {
                 <div className="w-full md:w-64 space-y-4">
                     <div className="flex justify-between items-center text-xs text-slate-500 uppercase font-bold tracking-widest">
                         <span>Suma total</span>
-                        <span>${venta.total}</span>
+                        <span>{venta.venta.total} Bs</span>
                     </div>
                     <div className="flex justify-between items-center text-xs text-slate-500 uppercase font-bold tracking-widest border-b border-slate-100 pb-4">
                         <span>Descuentos</span>
-                        <span>$0.00</span>
+                        <span>0.00 Bs</span>
                     </div>
                     <div className="flex justify-between items-center pt-2">
                         <span className="font-black text-xs uppercase tracking-[0.2em]">Total Final</span>
-                        <span className="text-3xl font-light tracking-tighter italic">${venta.total}</span>
+                        <span className="text-3xl font-light tracking-tighter italic">{venta.venta.totalConDescuento} Bs</span>
                     </div>
                 </div>
             </div>
 
-            <div className="mt-20 text-[9px] text-slate-300 uppercase tracking-widest text-center">
-                Generado el {new Date().toLocaleDateString()} — Documento Digital
-            </div>
+            </>)
+           }
+          
         </div>
     );
 };

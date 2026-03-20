@@ -27,7 +27,7 @@ export const RealizarVenta = () => {
 
             const data: RealizarVentaI = {
                 cliente: cliente._id,
-                detalleVenta: carrito.map((item) => ({ cantidad: item.cantidad, stock: item.stock }))
+                detalleVenta: carrito.map((item) => ({ cantidad: item.cantidad, stock: item.stock ,talla:item.talla}))
             }
             const response = await realizarVenta(data)
             if(response && response.data.venta){
