@@ -6,23 +6,27 @@ import { listarProducto } from "../service/producto"
 import type { AxiosError } from "axios"
 import type { ProductoI } from "../interface/producto"
 import { useEstadoReload } from "../../../core/utils/appUtil"
+import { Paginador } from "../../../core/components/Paginador"
 
 export const ListarProducto = ({ setSeleccionado, seleccionado }: { setSeleccionado: (v: ProductoI) => void, seleccionado?: ProductoI }) => {
     const { isReloading } = useEstadoReload()
     const [productos, setProductos] = useState<ProductoI[]>([])
-    const [busqueda, setBusqueda] = useState("")
-
+    const [nombre, setNombre] = useState("")
+    const [paginas, setPaginas] = useState<number>(1);
+    const [pagina, setPagina] = useState<number>(1);
     useEffect(() => {
         (async () => {
             try {
-                const response = await listarProducto()
-                setProductos(response)
+                const response = await listarProducto(nombre, pagina)
+                setProductos(response.data)
+                setPaginas(response.paginas)
             } catch (error) {
                 const e = error as AxiosError<any>
+                setPaginas(1)
                 console.log(e.response?.data)
             }
         })()
-    }, [isReloading])
+    }, [isReloading, pagina, nombre])
 
 
     return (
@@ -38,8 +42,8 @@ export const ListarProducto = ({ setSeleccionado, seleccionado }: { setSeleccion
                     <input
                         type="text"
                         placeholder="Buscar por nombre o categoría..."
-                        value={busqueda}
-                        onChange={(e) => setBusqueda(e.target.value)}
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
                         className="w-full border border-zinc-200 rounded-sm pl-10 py-2 text-sm outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 transition-all"
                     />
                 </div>
@@ -123,7 +127,7 @@ export const ListarProducto = ({ setSeleccionado, seleccionado }: { setSeleccion
                         ))}
                     </tbody>
                 </table>
-
+                <Paginador totalPaginas={paginas} onPageChange={setPagina} />
             </div>
         </div>
     )

@@ -1,6 +1,7 @@
 import type { AxiosResponse } from "axios"
 import { instanceAxios } from "../../../core/config/intanceAxios"
 import type { filtroProductoPublicoI, FormProducto, ImagenesI, ListarProductoPublicoI, ProductoDetalle, ProductoI } from "../interface/producto"
+import type { httpResponse } from "../../../core/interface/core"
 
 export async function crearProducto(data: FormProducto): Promise<AxiosResponse> {
     try {
@@ -65,9 +66,14 @@ export async function listarProductosPublico(filtro: filtroProductoPublicoI): Pr
     }
 }
 
-export async function listarProducto(): Promise<ProductoI[]> {
+export async function listarProducto(nombre:string, pagina:number): Promise<httpResponse<ProductoI>> {
     try {
-        const response = await instanceAxios.get("producto")
+        const response = await instanceAxios.get("producto", {
+            params:{
+                nombre,
+                pagina
+            }
+        })
         return response.data
     } catch (error) {
         throw error

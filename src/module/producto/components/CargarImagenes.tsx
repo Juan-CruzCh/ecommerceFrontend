@@ -5,7 +5,7 @@ import { asignarImagenPrincipal, cargarImagenes, listarImagenes } from '../servi
 import { HttpStatusCode, type AxiosError } from 'axios'
 import { useEstadoReload } from '../../../core/utils/appUtil'
 import { convertirAWebP } from '../utils/producto'
-import { urlBackend } from '../../../core/config/intanceAxios'
+import { urlBackend, urlImagen } from '../../../core/config/intanceAxios'
 
 export const CargarImagenes = ({ producto }: { producto: string }) => {
     const [imagenes, setImagenes] = useState<ImagenesI[]>([])
@@ -66,7 +66,7 @@ export const CargarImagenes = ({ producto }: { producto: string }) => {
                     className="aspect-square border border-zinc-200 relative group bg-zinc-50 overflow-hidden"
                 >
                     <img
-                        src={`${urlBackend}/${img.nombre}`}
+                        src={`${urlImagen}/${img.nombre}`}
                         className="w-full h-full object-cover"
                     />
 

@@ -1,6 +1,7 @@
 import axios, { AxiosError, HttpStatusCode } from "axios";
 
 export const urlBackend = import.meta.env.VITE_API_BACKEND
+export const urlImagen =`${urlBackend}/imagenPublico`
 
 export const instanceAxios = axios.create({
     baseURL: `${urlBackend}/api/`,

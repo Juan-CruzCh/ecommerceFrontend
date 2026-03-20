@@ -2,31 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Search, Check } from "lucide-react"; // Añadí Check para el icono
 import { ListarStocks } from "../service/stock";
 import type { StockProducto } from "../interface/stock";
-import { urlBackend } from "../../../core/config/intanceAxios";
+import { urlBackend, urlImagen } from "../../../core/config/intanceAxios";
 import type { carritoI } from "../../venta/interface/venta";
+import { Paginador } from "../../../core/components/Paginador";
 
 export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carritoI[]) => void, carrito: carritoI[] }) => {
     const [stocks, setStock] = useState<StockProducto[]>([]);
-    const [totalPaginas, setTotalPaginas] = useState<number>(0);
-    const [paginaActual, setPaginaActual] = useState<number>(1);
+    const [paginas, setPaginas] = useState<number>(1);
+    const [pagina, setPagina] = useState<number>(1);
     const [nombre, setNombre] = useState<string>("");
 
     useEffect(() => {
         (async () => {
             try {
-                const response = await ListarStocks(nombre, paginaActual);
+                const response = await ListarStocks(nombre, pagina);
                 setStock(response.data);
-                setTotalPaginas(response.paginas);
+                setPaginas(response.paginas);
             } catch (error) {
+                setPagina(pagina)
                 console.error("Error cargando stocks", error);
             }
         })();
-    }, [nombre, paginaActual]);
-
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNombre(e.target.value);
-        setPaginaActual(1);
-    };
+    }, [nombre, pagina]);
 
     return (
         <div className="min-h-screen bg-white text-zinc-800 font-sans p-8">
@@ -37,15 +34,13 @@ export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carr
                     <div className="relative w-full md:w-96">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
                         <input
-                            onChange={handleSearch}
+                            onChange={(e) => setNombre(e.target.value)}
                             type="text"
                             placeholder="BUSCAR POR NOMBRE..."
                             className="w-full bg-zinc-50 border-none py-3 pl-10 pr-4 text-[11px] font-bold tracking-widest outline-none focus:ring-1 focus:ring-zinc-900 transition-all uppercase"
                         />
                     </div>
                 </div>
-
-                {/* Tabla de Inventario */}
                 <div className="w-full overflow-hidden border border-zinc-100">
                     <table className="w-full text-left border-collapse">
                         <thead>
@@ -65,7 +60,7 @@ export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carr
                                     <td className="p-4">
                                         <div className="w-12 h-12 bg-zinc-100 border border-zinc-200 overflow-hidden">
                                             <img
-                                                src={`${urlBackend}/${item.imagen}`}
+                                                src={`${urlImagen}/${item.imagen}`}
                                                 alt={item.producto}
                                                 className="w-full h-full object-cover"
                                             />
@@ -129,28 +124,8 @@ export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carr
                             ))}
                         </tbody>
                     </table>
+                    <Paginador totalPaginas={paginas} onPageChange={setPagina} />
                 </div>
-
-                {/* Paginación */}
-                <footer className="mt-8 flex justify-between items-center">
-                    <p className="text-[10px] font-bold uppercase text-zinc-400 font-mono tracking-widest">
-                        Página {paginaActual.toString().padStart(2, '0')} // {totalPaginas.toString().padStart(2, '0')}
-                    </p>
-                    <div className="flex gap-1">
-                        {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((p) => (
-                            <button
-                                key={p}
-                                onClick={() => setPaginaActual(p)}
-                                className={`w-9 h-9 flex items-center justify-center text-[10px] font-bold transition-all border ${p === paginaActual
-                                    ? 'bg-zinc-900 text-white border-zinc-900'
-                                    : 'border-zinc-100 hover:bg-zinc-50 text-zinc-400'
-                                    }`}
-                            >
-                                {p.toString().padStart(2, '0')}
-                            </button>
-                        ))}
-                    </div>
-                </footer>
             </div>
         </div>
     );

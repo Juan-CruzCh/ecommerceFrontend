@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { ListarStocks } from "../service/stock";
 import type { StockProducto } from "../interface/stock";
-import { urlBackend } from "../../../core/config/intanceAxios";
+import { urlBackend, urlImagen } from "../../../core/config/intanceAxios";
 import type { AxiosError } from "axios";
 import { mostrarError } from "../../venta/utils/alertas";
 
@@ -62,13 +62,13 @@ export const ListarStock = () => {
                         </thead>
                         <tbody className="divide-y divide-zinc-50">
                             {stocks.map((item) => (
-                                <tr key={item._id} className="group hover:bg-zinc-50/30 transition-colors">
+                                <tr key={item._id} className="group">
                                     <td className="p-4">
                                         <div className="w-10 h-10 bg-zinc-100 border border-zinc-200 overflow-hidden">
                                             <img
-                                                src={`${urlBackend}/${item.imagen}`}
+                                                src={`${urlImagen}/${item.imagen}`}
                                                 alt={item.producto}
-                                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
+                                                className="w-full h-full"
                                             />
                                         </div>
                                     </td>

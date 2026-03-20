@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { listarClientes } from '../service/cliente';
 import type { listarClienteI } from '../interface/cliente';
 import type { AxiosError } from 'axios';
+import { Paginador } from '../../../core/components/Paginador';
 
 export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) => void }) => {
     const [clientes, setclientes] = useState<listarClienteI[]>([]);
@@ -12,23 +13,24 @@ export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) 
     const [apellidosFilter, setApellidosFilter] = useState('');
     const [celularFilter, setCelularFilter] = useState('');
     const [direccionFilter, setDireccionFilter] = useState('');
-    const [paginas, setPaginas] = useState(1);
+    const [paginas, setPaginas] = useState(0);
+    const [pagina, setPagina] = useState(0);
 
     useEffect(() => {
         if (isOpen) {
             (async () => {
                 try {
-                    const response = await listarClientes(codigoFilter, ciFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, paginas)
+                    const response = await listarClientes(codigoFilter, ciFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, pagina)
                     setclientes(response.data)
                     setPaginas(response.paginas)
                 } catch (error) {
                     const e = error as AxiosError<any>
                     console.log(e.response?.data);
-
+                    setPaginas(1)
                 }
             })()
         }
-    }, [isOpen, ciFilter, codigoFilter, celularFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, paginas])
+    }, [isOpen, ciFilter, codigoFilter, celularFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, pagina])
 
     return (
         <>
@@ -58,7 +60,7 @@ export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) 
                             </button>
                         </div>
 
-                        {/* Contenedor de Tabla */}
+                
                         <div className="flex-grow overflow-auto custom-scrollbar">
                             <table className="w-full ">
                                 <thead className="sticky top-0 bg-white z-10">
@@ -107,6 +109,7 @@ export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) 
                                     ))}
                                 </tbody>
                             </table>
+                            <Paginador totalPaginas={paginas} onPageChange={setPagina}/>
                         </div>
 
 
