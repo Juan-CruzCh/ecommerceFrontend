@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import { CrearProducto } from "../../producto/modal/CrearProducto";
 import { ListarStocks } from "../service/stock";
 import type { StockProducto } from "../interface/stock";
 import { urlBackend } from "../../../core/config/intanceAxios";
+import type { AxiosError } from "axios";
+import { mostrarError } from "../../venta/utils/alertas";
 
 export const ListarStock = () => {
     const [stocks, setStock] = useState<StockProducto[]>([]);
@@ -18,7 +19,8 @@ export const ListarStock = () => {
                 setStock(response.data);
                 setTotalPaginas(response.paginas);
             } catch (error) {
-                console.error("Error cargando stocks", error);
+                const e = error as AxiosError<any>;
+                mostrarError(e.response?.data.mensaje)
             }
         })();
     }, [nombre, paginaActual]);

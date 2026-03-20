@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, HttpStatusCode } from "axios";
 
 export const urlBackend = import.meta.env.VITE_API_BACKEND
 
@@ -18,11 +18,12 @@ instanceAxios.interceptors.response.use(
         return response;
     },
     (error) => {
-
         const e = error as AxiosError<any>
-        console.log(e);
+        if (e.status == HttpStatusCode.Forbidden) {
+            window.location.href = '/'
+        } else {
+            return Promise.reject(error);
+        }
 
-
-        return Promise.reject(error);
     }
 );

@@ -5,13 +5,14 @@ import { CrearCliente } from '../../cliente/modal/CrearCliente';
 import type { listarClienteI } from '../../cliente/interface/cliente';
 import type { carritoI, RealizarVentaI } from '../interface/venta';
 import type { AxiosError } from 'axios';
-import { data } from 'react-router';
+import { data, useNavigate } from 'react-router';
 import { realizarVenta } from '../service/venta';
+import { confirmarVenta, mostrarError } from '../utils/alertas';
 
 export const RealizarVenta = () => {
     const [cliente, setcliente] = useState<listarClienteI>();
     const [carrito, setCarrito] = useState<carritoI[]>([]);
-
+    const navigate = useNavigate()
     const totalVenta = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
     const eliminarDelCarrito = (index: number) => {
         setCarrito(carrito.filter((_, i) => i !== index));
@@ -19,6 +20,9 @@ export const RealizarVenta = () => {
 
     const btnRealizarVenta = async () => {
         if (!cliente || carrito.length === 0) return;
+
+        const confimar = await confirmarVenta()
+        if (!confimar) return
         try {
 
             const data: RealizarVentaI = {
@@ -26,11 +30,13 @@ export const RealizarVenta = () => {
                 detalleVenta: carrito.map((item) => ({ cantidad: item.cantidad, stock: item.stock }))
             }
             const response = await realizarVenta(data)
-            console.log(response);
-
+            if(response && response.data.venta){
+                navigate(`/detalle/venta/${response.data.venta}`)
+            }
         } catch (error) {
             const e = error as AxiosError<any>;
-            console.log(e.response?.data);
+            mostrarError(e.response?.data.mensaje)
+          
         }
     };
 
@@ -55,11 +61,7 @@ export const RealizarVenta = () => {
                         <span className="h-6 w-[1px] bg-blue-200 mx-1"></span>
                         <CrearCliente setCliente={setcliente} />
                     </div>
-                    {carrito.length > 0 && (
-                        <span className="text-[10px] bg-blue-600 text-white px-2 py-1 rounded-full font-bold">
-                            {carrito.length} Items
-                        </span>
-                    )}
+
                 </div>
 
                 {/* CONTENIDO DEL CARRITO */}
@@ -102,7 +104,7 @@ export const RealizarVenta = () => {
                                     <tr key={index} className="group hover:bg-gray-50 transition-colors">
                                         <td className="py-3">
                                             <div className="font-bold text-gray-800">{item.nombre}</div>
-                                            <div className="text-[9px] text-gray-400">Talla: {item.talla} | {item.codigo}</div>
+                                            <div className="font-bold  text-gray-800">Talla: {item.talla} | {item.codigo} </div>
                                         </td>
                                         <td className="py-3 text-center font-bold text-blue-600">
                                             {item.cantidad}
@@ -122,11 +124,7 @@ export const RealizarVenta = () => {
                                 ))}
                             </tbody>
                         </table>
-                        {carrito.length === 0 && (
-                            <div className="py-10 text-center text-gray-300 italic text-xs">
-                                El carrito está vacío
-                            </div>
-                        )}
+
                     </div>
                 </div>
 
@@ -135,11 +133,11 @@ export const RealizarVenta = () => {
                     <div className="flex justify-between items-end mb-4">
                         <div>
                             <span className="text-gray-400 text-xs font-bold uppercase block">Total Venta</span>
-                            <span className="text-gray-400 text-[10px]">Moneda: Bolivianos (Bs)</span>
+
                         </div>
                         <div className="text-right">
                             <span className="text-4xl font-black leading-none">
-                                {totalVenta.toFixed(2)}
+                                {totalVenta} Bs
                             </span>
                         </div>
                     </div>

@@ -10,8 +10,10 @@ import { autenticacionRouter } from "../../module/autenticacion/router/autentica
 import { ventaRouter } from "../../module/venta/router/router";
 import { useAutenticacionStore } from "../context/Autenticacion";
 
-const renderRoutes = (routes: RouterI[], isAuthenticated: boolean) =>
+const renderRoutes = (routes: RouterI[], isAuthenticated: boolean) =>  
   routes.map((item, index) => {
+    console.log(isAuthenticated);
+    
     if (!item.protegida) {
       return <Route key={index} path={item.path} element={<item.element />} />;
     }
@@ -31,8 +33,6 @@ const renderRoutes = (routes: RouterI[], isAuthenticated: boolean) =>
   });
 export const AppRouter = () => {
   const { isAutenticacion } = useAutenticacionStore()
-  console.log(isAutenticacion);
-
   return (
 
     <BrowserRouter>

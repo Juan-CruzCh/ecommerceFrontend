@@ -3,6 +3,7 @@ import type { ListarProductoPublicoI } from "../../producto/interface/producto";
 import { listarProductosPublico } from "../../producto/service/producto";
 import { urlBackend } from "../../../core/config/intanceAxios";
 import { CardProducto } from "../../producto/components/CardProducto";
+import { ProductosDestacadosPage } from "../../producto/page/ProductosDestacadosPage";
 
 export const InicioPage = () => {
 
@@ -76,35 +77,9 @@ export const InicioPage = () => {
                 </div>
             </div>
 
-            {/* CATEGORIAS */}
-            <div className="border-b border-zinc-100">
-                <div className="max-w-7xl mx-auto py-8 px-6">
-                    <div className="flex flex-wrap justify-center gap-10">
-                        {["Polleras", "Blusas", "Mantas", "Sombreros"].map((cat) => (
-                            <button key={cat} className="text-[11px] uppercase tracking-[0.2em] font-bold text-zinc-400 hover:text-pink-500 transition-colors">
-                                {cat}
-                            </button>
-                        ))}
-                    </div>
+                <div className="mt-6">
+                        <ProductosDestacadosPage />
                 </div>
-            </div>
-
-            {/* PRODUCTOS DESTACADOS */}
-            <div className="max-w-7xl mx-auto px-6 py-24">
-                <div className="flex justify-between items-end mb-16">
-                    <div>
-                        <span className="text-pink-500 text-[10px] uppercase tracking-widest font-bold">Selección especial</span>
-                        <h2 className="text-3xl font-light uppercase tracking-widest mt-2">Destacados</h2>
-                    </div>
-                    <a href="#" className="text-xs uppercase tracking-widest border-b border-zinc-800 pb-1 hover:text-pink-500 hover:border-pink-500 transition-all">Ver todo</a>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-16">
-                    {productos.map((item) => (
-                        <CardProducto item={item}/>
-                    ))}
-                </div>
-            </div>
 
             {/* INFO MARISA */}
             <div className="bg-zinc-50 py-32 border-t border-zinc-100">

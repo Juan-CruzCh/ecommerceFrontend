@@ -8,6 +8,8 @@ import { guardarStock } from "../service/stock";
 import { AxiosError, HttpStatusCode } from "axios";
 import { ListarTalla } from "../../talla/components/ListarTallas";
 import type { listarTallaI } from "../../talla/interface/talla";
+import { mostrarError } from "../../venta/utils/alertas";
+import { confirmarStock } from "../utils/alerta";
 
 export const CrearStockPage = () => {
     const [producto, setProducto] = useState<ProductoI>();
@@ -38,6 +40,8 @@ export const CrearStockPage = () => {
 
     const guardarTodoEnDB = async () => {
         try {
+            const confirmar = await confirmarStock()
+            if(!confirmar) return
             const response = await guardarStock(stockRegistrado.map((item) => ({
                 cantidad: item.cantidad,
                 producto: item.producto,
@@ -48,8 +52,8 @@ export const CrearStockPage = () => {
                 setStockRegistrado([]);
             }
         } catch (error) {
-            const e = error as AxiosError<any>
-            console.error(e.response?.data);
+            const e = error as AxiosError<any>;
+            mostrarError(e.response?.data.mensaje)
         }
     };
 
@@ -104,7 +108,7 @@ export const CrearStockPage = () => {
                                     <h2 className="text-xs font-black uppercase tracking-widest text-zinc-900">4. Definir Cantidad</h2>
                                 </div>
 
-                                {talla  ? (
+                                {talla ? (
                                     <div className="space-y-6">
                                         <div>
                                             <label className="text-[10px] font-black uppercase text-zinc-400 block mb-2 tracking-widest">Unidades a ingresar</label>

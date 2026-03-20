@@ -1,32 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { listarProductosPublico } from "../service/producto";
 import type { ListarProductoPublicoI } from "../interface/producto";
-import { urlBackend } from "../../../core/config/intanceAxios";
-import { Plus } from "lucide-react";
-import { Link } from "react-router";
-import { listarCategoria } from "../../categoria/service/categoria";
+
+import { listarCategoria, listarCategoriaPublico } from "../../categoria/service/categoria";
 import type { listarCategoriaI } from "../../categoria/interface/categoria";
 import { CardProducto } from "../components/CardProducto";
 
 export const CatalogoProductoPage = () => {
     const [productos, setProductos] = useState<ListarProductoPublicoI[]>([]);
     const [categorias, setCategorias] = useState<listarCategoriaI[]>([]);
+    const [categoria, setCategoria] = useState<string>();
 
     useEffect(() => {
         (async () => {
             try {
                 const [reponseProducto, responseCategoria] = await Promise.all([
-                    listarProductosPublico({ destacado: "" }),
-                    listarCategoria()
+                    listarProductosPublico({ destacado: "", categoria: categoria }),
+                    listarCategoriaPublico()
                 ])
                 setCategorias(responseCategoria)
                 setProductos(reponseProducto)
-
+                if (!categoria && responseCategoria.length > 0) {
+                    setCategoria(responseCategoria[0].id);
+                }
             } catch (error) {
                 console.error(error);
             }
         })()
-    }, [])
+    }, [categoria])
 
     return (
         <div className="min-h-screen bg-white">
@@ -35,24 +36,29 @@ export const CatalogoProductoPage = () => {
                 {/* Título Minimalista */}
                 <header className="text-center mb-12">
                     <h1 className="text-3xl font-light uppercase tracking-[0.2em] text-zinc-800">
-                        Catálogo
+                        Catálogo de productos
                     </h1>
                     <div className="h-px w-12 bg-pink-400 mx-auto mt-4"></div>
                 </header>
 
-                {/* Categorías */}
-                <div className="flex flex-wrap justify-center gap-8 mb-16">
-                    {categorias.map((cat, i) => (
+                {/* Categorías con diseño mejorado */}
+                <div className="flex flex-wrap justify-center gap-4 mb-16">
+                    {categorias.map((cat) => (
                         <button
                             key={cat.id}
-                            className={`text-xs uppercase tracking-widest font-bold transition-colors ${i === 0 ? "text-pink-500 border-b border-pink-500" : "text-zinc-400 hover:text-zinc-800"
-                                }`}
+                            onClick={() => setCategoria(cat.id)}
+                            className={`
+        px-6 py-2 rounded-full font-semibold text-sm transition-all duration-300
+        ${cat.id === categoria
+                                    ? "bg-[#D68B8F] text-white shadow-lg transform scale-105"
+                                    : "bg-zinc-100 text-zinc-600 hover:bg-pink-100 hover:text-pink-500"
+                                }
+      `}
                         >
                             {cat.nombre}
                         </button>
                     ))}
                 </div>
-
                 {/* Grilla de Productos */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-16">
                     {productos.map((item) => (

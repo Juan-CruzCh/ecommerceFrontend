@@ -67,7 +67,7 @@ export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carr
                                             <img
                                                 src={`${urlBackend}/${item.imagen}`}
                                                 alt={item.producto}
-                                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+                                                className="w-full h-full object-cover"
                                             />
                                         </div>
                                     </td>

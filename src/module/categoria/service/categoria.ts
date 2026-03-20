@@ -21,3 +21,12 @@ export async function listarCategoria(): Promise<listarCategoriaI[]> {
 
     }
 }
+export async function listarCategoriaPublico(): Promise<listarCategoriaI[]> {
+    try {
+        const response = await instanceAxios.get("categoria/publico")
+        return response.data
+    } catch (error) {
+        throw error
+
+    }
+}
