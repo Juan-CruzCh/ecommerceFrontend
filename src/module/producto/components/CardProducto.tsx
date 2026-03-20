@@ -4,21 +4,23 @@ import { urlBackend } from "../../../core/config/intanceAxios";
 import type { ListarProductoPublicoI } from "../interface/producto";
 
 export const CardProducto = ({ item }: { item: ListarProductoPublicoI }) => {
+  console.log(urlBackend,"/",item.imagenPrincipal);
+  
   return (
     <div className="group bg-white border border-zinc-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col h-full">
-      
+
       {/* Contenedor de Imagen */}
       <div className="relative aspect-square overflow-hidden bg-zinc-50">
         <img
           src={`${urlBackend}/${item.imagenPrincipal}`}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          alt={item.nombre}
+          alt={item.nombre} 
         />
         
         {/* Badge de Descuento o Stock (Relleno visual superior) */}
         <div className="absolute top-3 left-3 flex flex-col gap-2">
            <span className="bg-pink-500 text-white text-[9px] font-bold uppercase px-2 py-1 rounded-md shadow-sm">
-             Nuevo
+             Nuevo {`${urlBackend}/${item.imagenPrincipal}`}
            </span>
         </div>
 
@@ -48,6 +50,7 @@ export const CardProducto = ({ item }: { item: ListarProductoPublicoI }) => {
             <span className="text-[10px] text-zinc-400 uppercase font-medium">Precio</span>
             <p className="text-xl font-black text-zinc-900 leading-none">
               <span className="text-xs font-bold mr-0.5">Bs.</span>
+              
               {item.precioVenta}
             </p>
           </div>
