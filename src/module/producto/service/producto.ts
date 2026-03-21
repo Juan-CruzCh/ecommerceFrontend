@@ -14,6 +14,26 @@ export async function crearProducto(data: FormProducto): Promise<AxiosResponse> 
 }
 
 
+export async function editarProducto(data: FormProducto, id: string): Promise<AxiosResponse> {
+    try {
+        const response = await instanceAxios.patch(`producto/${id}`, data)
+        return response
+    } catch (error) {
+        throw error
+
+    }
+}
+
+
+export async function eliminarProducto(id: string): Promise<AxiosResponse> {
+    try {
+        const response = await instanceAxios.delete(`producto/${id}`)
+        return response
+    } catch (error) {
+        throw error
+
+    }
+}
 export async function listarImagenes(producto: string): Promise<ImagenesI[]> {
     try {
         const response = await instanceAxios.get(`imagenes/${producto}`)
@@ -25,7 +45,7 @@ export async function listarImagenes(producto: string): Promise<ImagenesI[]> {
 }
 export async function cargarImagenes(imagenes: File[], producto: string): Promise<AxiosResponse> {
     try {
-      
+
 
         const formData = new FormData();
         imagenes.forEach((file) => {
@@ -66,10 +86,10 @@ export async function listarProductosPublico(filtro: filtroProductoPublicoI): Pr
     }
 }
 
-export async function listarProducto(nombre:string, pagina:number): Promise<httpResponse<ProductoI>> {
+export async function listarProducto(nombre: string, pagina: number): Promise<httpResponse<ProductoI>> {
     try {
         const response = await instanceAxios.get("producto", {
-            params:{
+            params: {
                 nombre,
                 pagina
             }
@@ -81,7 +101,7 @@ export async function listarProducto(nombre:string, pagina:number): Promise<http
     }
 }
 
-export async function asignarImagenPrincipal(idImagen:string): Promise<AxiosResponse> {
+export async function asignarImagenPrincipal(idImagen: string): Promise<AxiosResponse> {
     try {
         const response = await instanceAxios.patch(`producto/asignarImagenPrincipal/${idImagen}`)
         return response
@@ -90,7 +110,7 @@ export async function asignarImagenPrincipal(idImagen:string): Promise<AxiosResp
 
     }
 }
-export async function detalleProductoPublico(producto:string): Promise<ProductoDetalle> {
+export async function detalleProductoPublico(producto: string): Promise<ProductoDetalle> {
     try {
         const response = await instanceAxios.get(`producto/publico/detalle/${producto}`)
         return response.data

@@ -20,6 +20,7 @@ export interface ProductoI {
     precioVenta: number
     precioCompra: number
     descripcion: string
+    idCategoria: string
 }
 
 
@@ -46,16 +47,16 @@ export interface filtroProductoPublicoI {
 
 
 export interface Stock {
-  cantidad: number;
-  idStock: string;
-  productoTalla: string;
-  talla: string;
+    cantidad: number;
+    idStock: string;
+    productoTalla: string;
+    talla: string;
 }
 
 export interface ProductoDetalle {
-  descripcion: string;
-  imagenes: ImagenesI[];
-  nombre: string;
-  precioVenta: number;
-  stock: Stock[];
+    descripcion: string;
+    imagenes: ImagenesI[];
+    nombre: string;
+    precioVenta: number;
+    stock: Stock[];
 }

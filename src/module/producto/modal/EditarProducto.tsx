@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { X, Star, Eye, AlignLeft, Plus } from "lucide-react";
-import type { FormProducto } from "../interface/producto";
+import type { FormProducto, ProductoI } from "../interface/producto";
 import type { listarCategoriaI } from "../../categoria/interface/categoria";
 import { listarCategoria } from "../../categoria/service/categoria";
-import { crearProducto } from "../service/producto";
+import { crearProducto, editarProducto } from "../service/producto";
 import { AxiosError, HttpStatusCode } from "axios";
 import { useEstadoReload } from "../../../core/utils/appUtil";
 import { mostrarError } from "../../venta/utils/alertas";
 
-export const CrearProducto = () => {
+export const EditarProducto = ({ producto }: { producto: ProductoI }) => {
     const [categorias, setCategorias] = useState<listarCategoriaI[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const { triggerReload } = useEstadoReload();
@@ -17,6 +17,7 @@ export const CrearProducto = () => {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors }
     } = useForm<FormProducto>();
 
@@ -24,15 +25,16 @@ export const CrearProducto = () => {
         try {
             data.precioCompra = Number(data.precioCompra);
             data.precioVenta = Number(data.precioVenta);
-            const response = await crearProducto(data);
+            const response = await editarProducto(data, producto._id);
 
-            if (response.status === HttpStatusCode.Created) {
+            if (response.status === HttpStatusCode.Ok) {
                 triggerReload();
                 reset();
                 setIsOpen(false);
             }
         } catch (error) {
             const e = error as AxiosError<any>;
+
             mostrarError(e.response?.data.mensaje)
         }
     };
@@ -50,13 +52,24 @@ export const CrearProducto = () => {
         }
     }, [isOpen]);
 
+    useEffect(() => {
+        if (isOpen && producto && categorias.length) {
+            setValue("nombre", producto.nombre);
+            setValue("descripcion", producto.descripcion);
+            setValue("precioCompra", producto.precioCompra);
+            setValue("precioVenta", producto.precioVenta);
+            setValue("destacado", producto.destacado);
+            setValue("publico", producto.publico);
+            setValue("categoria", producto.idCategoria);
+        }
+    }, [isOpen, producto, categorias]);
     return (
         <>
             <button
                 onClick={() => setIsOpen(true)}
                 className="flex items-center gap-1 text-[10px] font-bold uppercase border border-zinc-200 px-3 py-1.5 hover:border-zinc-900 hover:bg-zinc-900 hover:text-white transition-all"
             >
-                <Plus size={12} /> Nuevo Producto
+                <Plus size={12} /> Editar
             </button>
 
             {isOpen && (

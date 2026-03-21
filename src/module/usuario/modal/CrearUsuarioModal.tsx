@@ -5,6 +5,7 @@ import type { UsuarioFormData } from '../interface/usuario';
 import { HttpStatusCode, type AxiosError } from 'axios';
 import { crearUsuario } from '../service/usuario';
 import { useEstadoReload } from '../../../core/utils/appUtil';
+import { mostrarError } from '../../venta/utils/alertas';
 
 export const CrearUsuarioModal = () => {
     const { triggerReload } = useEstadoReload()
@@ -31,8 +32,8 @@ export const CrearUsuarioModal = () => {
                 setIsVisible(false)
             }
         } catch (error) {
-            const e = error as AxiosError<any>
-            console.log(e.response?.data);
+            const e = error as AxiosError<any>;
+            mostrarError(e.response?.data.mensaje)
 
         }
     };
@@ -142,7 +143,6 @@ export const CrearUsuarioModal = () => {
                                         type="password"
                                         {...register("password", {
                                             required: true,
-                                            minLength: 6
                                         })}
                                         className={inputClass(errors.password)}
                                     />

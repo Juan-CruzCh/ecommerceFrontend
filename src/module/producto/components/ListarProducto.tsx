@@ -2,14 +2,17 @@ import { useEffect, useState } from "react"
 import { CrearCategoriaModal } from "../../categoria/modal/CrearCategoriaModal"
 import { CrearProducto } from "../modal/CrearProducto"
 import { Edit2, Eye, EyeOff, Search, Star, Trash2, Tag, FileText } from "lucide-react"
-import { listarProducto } from "../service/producto"
-import type { AxiosError } from "axios"
+import { eliminarProducto, listarProducto } from "../service/producto"
+import { HttpStatusCode, type AxiosError } from "axios"
 import type { ProductoI } from "../interface/producto"
 import { useEstadoReload } from "../../../core/utils/appUtil"
 import { Paginador } from "../../../core/components/Paginador"
+import { EditarProducto } from "../modal/EditarProducto"
+import { confirmarEliminar } from "../../../core/utils/alerta"
+import { mostrarError } from "../../venta/utils/alertas"
 
 export const ListarProducto = ({ setSeleccionado, seleccionado }: { setSeleccionado: (v: ProductoI) => void, seleccionado?: ProductoI }) => {
-    const { isReloading } = useEstadoReload()
+    const { isReloading, triggerReload } = useEstadoReload()
     const [productos, setProductos] = useState<ProductoI[]>([])
     const [nombre, setNombre] = useState("")
     const [paginas, setPaginas] = useState<number>(1);
@@ -114,13 +117,32 @@ export const ListarProducto = ({ setSeleccionado, seleccionado }: { setSeleccion
                                     {p.precioVenta} <span className="text-[10px]">Bs</span>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <div className="flex justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button className="text-zinc-400 hover:text-zinc-900 hover:scale-110 transition-transform">
-                                            <Edit2 size={16} />
-                                        </button>
-                                        <button className="text-zinc-400 hover:text-red-500 hover:scale-110 transition-transform">
+
+                                    <div className="flex items-center gap-3">
+
+                                        <EditarProducto producto={p} />
+
+                                        <button
+                                            onClick={async () => {
+                                                const confirmar = await confirmarEliminar(p.nombre)
+                                                if (!confirmar) return
+                                                try {
+                                                    const response = await eliminarProducto(p._id)
+
+                                                    if (response.status === HttpStatusCode.Ok) {
+                                                        triggerReload();
+
+                                                    }
+                                                } catch (error) {
+                                                    const e = error as AxiosError<any>;
+                                                    mostrarError(e.response?.data.mensaje)
+
+                                                }
+                                            }}
+                                            className="text-zinc-400 hover:text-red-500 hover:scale-110 transition-transform">
                                             <Trash2 size={16} />
                                         </button>
+
                                     </div>
                                 </td>
                             </tr>
