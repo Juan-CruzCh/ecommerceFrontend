@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { listarProductosPublico } from '../service/producto'
 import type { ListarProductoPublicoI } from '../interface/producto';
 
-import { CardProducto } from '../components/CardProducto';
+import { CardProducto } from './CardProducto';
 
 export const ProductosDestacadosPage = () => {
     const [productos, setProductos] = useState<ListarProductoPublicoI[]>([]);

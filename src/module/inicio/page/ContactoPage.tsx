@@ -1,10 +1,16 @@
 import React from "react";
+import { SeoManager } from "../../../core/components/SeoManager";
 
 export const ContactoPage = () => {
     return (
         <div className="min-h-screen bg-gray-50">
 
-            {/* MAPA */}
+           <SeoManager 
+                titulo="Contáctanos | Ubicación y Atención al Cliente" 
+                descripcion="¿Tienes dudas? Visítanos en Sucre o contáctanos por WhatsApp. Estamos para ayudarte con tus pedidos de ropa tradicional en Tienda Marisa."
+                ruta="contacto"
+                tipo="website"
+            />
             <div className="w-full h-[420px] shadow-md">
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6047.830333149744!2d-65.26287122269668!3d-19.034481971045135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94f1ae126b914f21%3A0x7c31f47f6ecbc7ec!2sDestacamento%20111%20N%C2%BA%20192%2C%20Sucre%2C%20Bolivia!5e0!3m2!1sen!2sus!4v1563812068529!5m2!1sen!2sus"

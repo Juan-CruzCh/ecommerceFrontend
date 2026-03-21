@@ -3,7 +3,8 @@ import type { ListarProductoPublicoI } from "../../producto/interface/producto";
 import { listarProductosPublico } from "../../producto/service/producto";
 import { urlBackend } from "../../../core/config/intanceAxios";
 import { CardProducto } from "../../producto/components/CardProducto";
-import { ProductosDestacadosPage } from "../../producto/page/ProductosDestacadosPage";
+import { ProductosDestacadosPage } from "../../producto/components/ProductosDestacadosPage";
+import { SeoManager } from "../../../core/components/SeoManager";
 
 export const InicioPage = () => {
 
@@ -35,6 +36,13 @@ export const InicioPage = () => {
     }, [])
     return (
         <div className="w-full bg-white text-zinc-800">
+            <SeoManager 
+                titulo="Moda Tradicional y Diseños Únicos" 
+                descripcion="Bienvenida a Tienda Marisa. Descubre nuestra nueva colección de ropa tradicional con diseños exclusivos que cuentan historias. Calidad y elegancia en cada prenda."
+                ruta=""
+                imagen="/img/Marisa.jpg" 
+                tipo="website"
+            />
 
             {/* HERO CARRUSEL - Limpio y con transición suave */}
             <div className="relative w-full h-[75vh] bg-zinc-100 overflow-hidden">
