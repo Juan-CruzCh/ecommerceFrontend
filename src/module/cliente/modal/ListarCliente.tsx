@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { listarClientes } from '../service/cliente';
+import { eliminarClientes, listarClientes } from '../service/cliente';
 import type { listarClienteI } from '../interface/cliente';
-import type { AxiosError } from 'axios';
+import { HttpStatusCode, type AxiosError } from 'axios';
 import { Paginador } from '../../../core/components/Paginador';
-
+import { Trash2, Pencil, CheckCircle } from "lucide-react";
+import { useEstadoReload } from '../../../core/utils/appUtil';
+import { mostrarError } from '../../venta/utils/alertas';
+import { confirmarEliminar } from '../../../core/utils/alerta';
+import { EditarCliente } from './EditarCliente';
 export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) => void }) => {
     const [clientes, setclientes] = useState<listarClienteI[]>([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +19,7 @@ export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) 
     const [direccionFilter, setDireccionFilter] = useState('');
     const [paginas, setPaginas] = useState(1);
     const [pagina, setPagina] = useState(1);
-
+    const { isReloading, triggerReload } = useEstadoReload()
     useEffect(() => {
         if (isOpen) {
             (async () => {
@@ -30,7 +34,7 @@ export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) 
                 }
             })()
         }
-    }, [isOpen, ciFilter, codigoFilter, celularFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, pagina])
+    }, [isReloading, isOpen, ciFilter, codigoFilter, celularFilter, nombreFilter, apellidosFilter, celularFilter, direccionFilter, pagina])
 
     return (
         <>
@@ -60,7 +64,7 @@ export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) 
                             </button>
                         </div>
 
-                
+
                         <div className="flex-grow overflow-auto custom-scrollbar">
                             <table className="w-full ">
                                 <thead className="sticky top-0 bg-white z-10">
@@ -94,27 +98,54 @@ export const ListarCliente = ({ setCliente }: { setCliente: (v: listarClienteI) 
                                             <td className="px-3 py-2.5 border-r border-gray-100 text-gray-700">{c.apellidos}</td>
                                             <td className="px-3 py-2.5 border-r border-gray-100 font-mono text-[11px]">{c.celular}</td>
                                             <td className="px-3 py-2.5 border-r border-gray-100 text-gray-500 truncate max-w-[150px]">{c.direccion}</td>
-                                            <td className="px-3 py-2.5 text-center">
-                                                <button
-                                                    onClick={() => {
-                                                        setCliente(c)
-                                                        setIsOpen(false)
-                                                    }}
-                                                    className="bg-white border border-black px-3 py-1 text-[9px] font-black uppercase hover:bg-black hover:text-white transition-all transform active:scale-95"
-                                                >
-                                                    Seleccionar
-                                                </button>
+                                            <td className="px-3 py-2.5">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    {/* Botón Seleccionar */}
+                                                    <button
+                                                        title="Seleccionar"
+                                                        onClick={() => { setCliente(c); setIsOpen(false); }}
+                                                        className="p-1.5 border border-black hover:bg-black hover:text-white transition-all active:scale-95"
+                                                    >
+                                                        <CheckCircle size={14} />
+                                                    </button>
+
+                                                    {/* Botón Editar */}
+                                                    <EditarCliente cliente={c} />
+
+                                                    {/* Botón Eliminar */}
+                                                    <button
+                                                        onClick={async () => {
+                                                            try {
+                                                                const confirmar = await confirmarEliminar(`${c.nombre} ${c.apellidos}`)
+                                                                if (!confirmar) return
+                                                                const response = await eliminarClientes(c._id)
+                                                                if (response.status == HttpStatusCode.Ok) {
+                                                                    triggerReload()
+                                                                }
+                                                            } catch (error) {
+                                                                const e = error as AxiosError<any>;
+                                                                mostrarError(e.response?.data.mensaje)
+                                                            }
+
+                                                        }}
+                                                        title="Eliminar"
+
+                                                        className="p-1.5 border border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all active:scale-95"
+                                                    >
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
-                            <Paginador totalPaginas={paginas} onPageChange={setPagina}/>
+                            <Paginador totalPaginas={paginas} onPageChange={setPagina} />
                         </div>
 
 
                     </div>
-                </div>
+                </div >
             )}
         </>
     );

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { detalleProductoPublico } from "../service/producto";
 import { useParams } from "react-router";
 import type { ProductoDetalle } from "../interface/producto";
-import { urlBackend } from "../../../core/config/intanceAxios";
+import { urlBackend, urlImagen } from "../../../core/config/intanceAxios";
 import type { AxiosError } from "axios";
 
 export const ProductoDetallePage = () => {
@@ -45,7 +45,7 @@ export const ProductoDetallePage = () => {
                         <div>
                             <div className="w-full h-[520px] overflow-hidden rounded-md border bg-gray-50">
                                 <img
-                                    src={`${urlBackend}/${imagenSeleccionada}`}
+                                    src={`${urlImagen}/${imagenSeleccionada}`}
                                     className="w-full h-full object-cover"
                                     alt="Producto"
                                 />
@@ -56,7 +56,7 @@ export const ProductoDetallePage = () => {
                                     <img
                                         key={i}
                                         onClick={() => setImagenSeleccionada(img.nombre)}
-                                        src={`${urlBackend}/${img.nombre}`}
+                                        src={`${urlImagen}/${img.nombre}`}
                                         className={`w-20 h-20 object-cover rounded-md cursor-pointer transition border-2 ${imagenSeleccionada === img.nombre ? "border-black" : "border-transparent opacity-70"
                                             }`}
                                     />
@@ -81,8 +81,8 @@ export const ProductoDetallePage = () => {
                                             key={item.idStock}
                                             onClick={() => setTallaSeleccionada(item.talla)}
                                             className={`min-w-[48px] h-10 border rounded-md text-sm transition ${tallaSeleccionada === item.talla
-                                                    ? "bg-black text-white border-black"
-                                                    : "bg-white text-black hover:border-black"
+                                                ? "bg-black text-white border-black"
+                                                : "bg-white text-black hover:border-black"
                                                 }`}
                                         >
                                             {item.talla}
@@ -112,8 +112,8 @@ export const ProductoDetallePage = () => {
                                 <button
 
                                     className={`w-full py-3 rounded-md transition font-medium ${tallaSeleccionada
-                                            ? "bg-black text-white hover:opacity-90"
-                                            : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                        ? "bg-black text-white hover:opacity-90"
+                                        : "bg-gray-200 text-gray-500 cursor-not-allowed"
                                         }`}
                                 >
                                     Añadir al carrito

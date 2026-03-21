@@ -12,15 +12,24 @@ export async function crearCliente(data: clienteForm): Promise<listarClienteI> {
 
     }
 }
-export async function listarClientes(codigo:string, ci:string , nombre:string, apellidos:string, celular:string, direccion:string, pagina:number): Promise<httpResponse<listarClienteI>> {
+export async function editarCliente(data: clienteForm, id: string): Promise<AxiosResponse> {
+    try {
+        const response = await instanceAxios.patch(`cliente/${id}`, data)
+        return response
+    } catch (error) {
+        throw error
+
+    }
+}
+export async function listarClientes(codigo: string, ci: string, nombre: string, apellidos: string, celular: string, direccion: string, pagina: number): Promise<httpResponse<listarClienteI>> {
     try {
         const response = await instanceAxios.get(`cliente`,
             {
-                params:{
+                params: {
                     codigo,
                     apellidos,
                     ci,
-                    nombre, 
+                    nombre,
                     celular,
                     direccion,
                     pagina
@@ -29,6 +38,15 @@ export async function listarClientes(codigo:string, ci:string , nombre:string, a
             }
         )
         return response.data
+    } catch (error) {
+        throw error
+
+    }
+}
+export async function eliminarClientes(id: string): Promise<AxiosResponse> {
+    try {
+        const response = await instanceAxios.delete(`cliente/${id}`)
+        return response
     } catch (error) {
         throw error
 
