@@ -27,22 +27,22 @@ export const RealizarVenta = () => {
 
             const data: RealizarVentaI = {
                 cliente: cliente._id,
-                detalleVenta: carrito.map((item) => ({ cantidad: item.cantidad, stock: item.stock ,talla:item.talla}))
+                detalleVenta: carrito.map((item) => ({ cantidad: item.cantidad, stock: item.stock, talla: item.talla }))
             }
             const response = await realizarVenta(data)
-            if(response && response.data.venta){
+            if (response && response.data.venta) {
                 navigate(`/detalle/venta/${response.data.venta}`)
             }
         } catch (error) {
             const e = error as AxiosError<any>;
             mostrarError(e.response?.data.mensaje)
-          
+
         }
     };
 
     return (
 
-        <div className="flex flex-col md:flex-row min-h-screen md:h-screen bg-gray-100 p-2 md:p-4 gap-4 overflow-y-auto md:overflow-hidden font-sans">
+        <div className="flex flex-col md:flex-row min-h-screen md:h-screen  p-2 md:p-4 gap-4 overflow-y-auto md:overflow-hidden font-sans">
 
 
             <div className="w-full md:w-2/3 bg-white rounded-xl shadow-lg flex flex-col h-auto md:h-full overflow-hidden">
@@ -55,10 +55,10 @@ export const RealizarVenta = () => {
             <div className="w-full md:w-1/3 bg-white rounded-xl shadow-lg flex flex-col h-fit md:h-full overflow-hidden">
 
                 {/* 1. SECCIÓN DE CLIENTE SELECCIONADO */}
-                <div className="p-4 md:p-6 border-b bg-blue-50/50 flex items-center justify-between">
+                <div className="p-4 md:p-6 border-bflex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <ListarCliente setCliente={setcliente} />
-                        <span className="h-6 w-[1px] bg-blue-200 mx-1"></span>
+
                         <CrearCliente setCliente={setcliente} />
                     </div>
 

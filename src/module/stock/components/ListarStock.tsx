@@ -5,30 +5,31 @@ import type { StockProducto } from "../interface/stock";
 import { urlBackend, urlImagen } from "../../../core/config/intanceAxios";
 import type { AxiosError } from "axios";
 import { mostrarError } from "../../venta/utils/alertas";
+import { Paginador } from "../../../core/components/Paginador";
 
 export const ListarStock = () => {
     const [stocks, setStock] = useState<StockProducto[]>([]);
-    const [totalPaginas, setTotalPaginas] = useState<number>(0);
-    const [paginaActual, setPaginaActual] = useState<number>(1);
+    const [paginas, setPaginas] = useState<number>(0);
+    const [pagina, setPagina] = useState<number>(1);
     const [nombre, setNombre] = useState<string>("");
 
     useEffect(() => {
         (async () => {
             try {
-                const response = await ListarStocks(nombre, paginaActual);
+                const response = await ListarStocks(nombre, pagina);
                 setStock(response.data);
-                setTotalPaginas(response.paginas);
+                setPaginas(response.paginas);
             } catch (error) {
                 const e = error as AxiosError<any>;
                 mostrarError(e.response?.data.mensaje)
             }
         })();
-    }, [nombre, paginaActual]);
+    }, [nombre, pagina]);
 
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNombre(e.target.value);
-        setPaginaActual(1);
+        setPagina(1);
     };
 
     return (
@@ -58,6 +59,7 @@ export const ListarStock = () => {
                                 <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider">Categoria</th>
                                 <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider">Talla</th>
                                 <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Cantidad</th>
+                                <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Precio de venta</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-zinc-50">
@@ -88,32 +90,17 @@ export const ListarStock = () => {
                                     <td className="p-4 text-center">
                                         <span className="text-xs font-bold font-mono">{item.cantidad}</span>
                                     </td>
+                                    <td className="p-4 text-center">
+                                        <span className="text-xs font-bold font-mono">{item.precioVenta} Bs</span>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    <Paginador onPageChange={setPagina} totalPaginas={paginas} />
                 </div>
 
-                {/* Paginación Dinámica */}
-                <footer className="mt-8 flex justify-between items-center">
-                    <p className="text-[10px] font-bold uppercase text-zinc-400 font-mono tracking-widest">
-                        Página {paginaActual.toString().padStart(2, '0')} // {totalPaginas.toString().padStart(2, '0')}
-                    </p>
-                    <div className="flex gap-1">
-                        {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((p) => (
-                            <button
-                                key={p}
-                                onClick={() => setPaginaActual(p)}
-                                className={`w-8 h-8 flex items-center justify-center text-[10px] font-bold transition-all ${p === paginaActual
-                                    ? 'bg-zinc-900 text-white'
-                                    : 'border border-zinc-100 hover:bg-zinc-50 text-zinc-400'
-                                    }`}
-                            >
-                                {p.toString().padStart(2, '0')}
-                            </button>
-                        ))}
-                    </div>
-                </footer>
+
             </div>
         </div>
     );

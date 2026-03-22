@@ -44,8 +44,8 @@ export const Sidebar: React.FC = () => {
             >
 
                 {isOpen && (
-                    <div className="flex items-center justify-between px-6 h-20">
-                        <span className="text-xl font-bold text-gray-800 tracking-tight">
+                    <div className="flex items-center justify-between px-6 h-20 bg-[#D68B8F]">
+                        <span className="text-xl font-bold text-white tracking-tight">
                             MARISA
                         </span>
                         <button
