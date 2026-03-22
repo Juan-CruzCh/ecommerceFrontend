@@ -34,6 +34,15 @@ export async function eliminarProducto(id: string): Promise<AxiosResponse> {
 
     }
 }
+export async function eliminarImagen(id: string): Promise<AxiosResponse> {
+    try {
+        const response = await instanceAxios.delete(`imagen/${id}`)
+        return response
+    } catch (error) {
+        throw error
+
+    }
+}
 export async function listarImagenes(producto: string): Promise<ImagenesI[]> {
     try {
         const response = await instanceAxios.get(`imagenes/${producto}`)

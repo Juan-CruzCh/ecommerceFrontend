@@ -1,11 +1,12 @@
 import { Plus, X } from 'lucide-react'
 import { useEffect, useState, type ChangeEvent } from 'react'
 import type { ImagenesI } from '../interface/producto'
-import { asignarImagenPrincipal, cargarImagenes, listarImagenes } from '../service/producto'
+import { asignarImagenPrincipal, cargarImagenes, eliminarImagen, listarImagenes } from '../service/producto'
 import { HttpStatusCode, type AxiosError } from 'axios'
 import { useEstadoReload } from '../../../core/utils/appUtil'
 import { convertirAWebP } from '../utils/producto'
-import { urlBackend, urlImagen } from '../../../core/config/intanceAxios'
+import { urlImagen } from '../../../core/config/intanceAxios'
+import { mostrarError } from '../../venta/utils/alertas'
 
 export const CargarImagenes = ({ producto }: { producto: string }) => {
     const [imagenes, setImagenes] = useState<ImagenesI[]>([])
@@ -25,8 +26,8 @@ export const CargarImagenes = ({ producto }: { producto: string }) => {
 
             }
         } catch (error) {
-            const e = error as AxiosError<any>
-            console.log(e.response?.data);
+            const e = error as AxiosError<any>;
+            mostrarError(e.response?.data.mensaje)
 
         } finally {
             setSubiendo(false);
@@ -40,7 +41,8 @@ export const CargarImagenes = ({ producto }: { producto: string }) => {
                 const response = await listarImagenes(producto)
                 setImagenes(response)
             } catch (error) {
-
+                const e = error as AxiosError<any>;
+                mostrarError(e.response?.data.mensaje)
             }
         })()
     }, [isReloading, producto])
@@ -52,7 +54,20 @@ export const CargarImagenes = ({ producto }: { producto: string }) => {
                 triggerReload()
             }
         } catch (error) {
-            console.log(error);
+            const e = error as AxiosError<any>;
+            mostrarError(e.response?.data.mensaje)
+
+        }
+    }
+    const btnEliminar = async (id: string) => {
+        try {
+            const response = await eliminarImagen(id)
+            if (response.status == HttpStatusCode.Ok) {
+                triggerReload()
+            }
+        } catch (error) {
+            const e = error as AxiosError<any>;
+            mostrarError(e.response?.data.mensaje)
 
         }
     }
@@ -72,6 +87,7 @@ export const CargarImagenes = ({ producto }: { producto: string }) => {
 
                     {/* Botón eliminar */}
                     <button
+                        onClick={() => btnEliminar(img._id)}
                         className="absolute top-1 right-1 p-1 bg-white/80 hover:bg-white text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                         <X size={10} />

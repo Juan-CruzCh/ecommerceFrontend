@@ -41,7 +41,7 @@ export const CrearStockPage = () => {
     const guardarTodoEnDB = async () => {
         try {
             const confirmar = await confirmarStock()
-            if(!confirmar) return
+            if (!confirmar) return
             const response = await guardarStock(stockRegistrado.map((item) => ({
                 cantidad: item.cantidad,
                 producto: item.producto,
@@ -100,41 +100,44 @@ export const CrearStockPage = () => {
                                 </div>
                                 <ListarTalla setTalla={setTalla} talla={talla} />
                             </div>
+                            {talla && (
+                                <div className="bg-white p-6 border border-zinc-200 shadow-sm">
+                                    <div className="flex items-center gap-2 mb-6">
+                                        <ListChecks size={16} className="text-zinc-900" />
+                                        <h2 className="text-xs font-black uppercase tracking-widest text-zinc-900">4. Definir Cantidad</h2>
+                                    </div>
 
-                            {/* --- PASO 4: CANTIDAD Y STOCK --- */}
-                            <div className="bg-white p-6 border border-zinc-200 shadow-sm">
-                                <div className="flex items-center gap-2 mb-6">
-                                    <ListChecks size={16} className="text-zinc-900" />
-                                    <h2 className="text-xs font-black uppercase tracking-widest text-zinc-900">4. Definir Cantidad</h2>
-                                </div>
 
-                                {talla ? (
                                     <div className="space-y-6">
-                                        <div>
-                                            <label className="text-[10px] font-black uppercase text-zinc-400 block mb-2 tracking-widest">Unidades a ingresar</label>
-                                            <div className="flex gap-4">
-                                                <input
-                                                    type="number"
-                                                    value={cantidad}
-                                                    min={1}
-                                                    onChange={(e) => setCantidad(Number(e.target.value))}
-                                                    className="flex-1 text-4xl font-black border-b-2 border-zinc-900 py-2 outline-none bg-transparent"
-                                                />
-                                                <button
-                                                    onClick={anadirResumen}
-                                                    className="bg-zinc-900 text-white  py-4 text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95"
-                                                >
-                                                    Añadir Item
-                                                </button>
+                                        <div className="flex flex-col gap-4"> {/* Añadido flex-col para que el botón baje */}
+                                            <div>
+                                                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-2 tracking-widest">
+                                                    Unidades a ingresar
+                                                </label>
+                                                <div className="flex gap-4">
+                                                    <input
+                                                        type="number"
+                                                        defaultValue={cantidad}
+                                                        min={1}
+                                                        onChange={(e) => setCantidad(Number(e.target.value))}
+                                                        // w-full asegura que ocupe todo el ancho
+                                                        className="w-full text-4xl font-black border-b-2 border-zinc-900 py-2 outline-none bg-transparent"
+                                                    />
+                                                </div>
                                             </div>
+
+                                            <button
+                                                onClick={anadirResumen}
+
+                                                className="w-full bg-zinc-900 text-white py-4 text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95"
+                                            >
+                                                Añadir
+                                            </button>
                                         </div>
                                     </div>
-                                ) : (
-                                    <div className="h-32 flex flex-col items-center justify-center border-2 border-dashed border-zinc-100 rounded">
-                                        <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest">Primero selecciona una talla</p>
-                                    </div>
-                                )}
-                            </div>
+
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

@@ -13,17 +13,23 @@ export async function realizarVenta(data: RealizarVentaI): Promise<AxiosResponse
     }
 }
 
-export async function listarVentas(): Promise<listarVentaI[]> {
+export async function listarVentas(f1: string, f2: string): Promise<listarVentaI[]> {
 
     try {
-        const response = await instanceAxios.get(`listarVenta`)
+        const response = await instanceAxios.post(`listarVenta`, {
+
+            fechaInicio: f1,
+            fechaFin: f2
+
+
+        })
         return response.data
     } catch (error) {
         throw error
 
     }
 }
-export async function detalleVentas(venta:string): Promise<DetalleVentaI> {
+export async function detalleVentas(venta: string): Promise<DetalleVentaI> {
 
     try {
         const response = await instanceAxios.get(`detalleVenta/${venta}`)

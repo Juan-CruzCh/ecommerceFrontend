@@ -79,7 +79,7 @@ export const EditarProducto = ({ producto }: { producto: ProductoI }) => {
                         {/* Header */}
                         <div className="flex justify-between items-center px-6 py-4 border-b border-zinc-100">
                             <h2 className="text-xs font-bold uppercase tracking-widest">
-                                Nuevo Producto
+                                Editar Producto
                             </h2>
                             <button onClick={() => setIsOpen(false)} className="text-zinc-400 hover:text-zinc-900">
                                 <X size={18} />
@@ -186,7 +186,7 @@ export const EditarProducto = ({ producto }: { producto: ProductoI }) => {
                                     type="submit"
                                     className="w-full bg-zinc-900 text-white py-3 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-zinc-800 transition-colors"
                                 >
-                                    <Plus size={14} /> Crear Producto
+                                    <Plus size={14} /> Guardar
                                 </button>
                             </div>
                         </form>

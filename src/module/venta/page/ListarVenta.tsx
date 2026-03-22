@@ -1,108 +1,127 @@
 import React, { useEffect, useState } from 'react';
-import { Eye } from 'lucide-react';
+import { Search, Eye, FileText, Calendar, Filter, ArrowRight } from 'lucide-react';
 import { listarVentas } from '../service/venta';
 import type { listarVentaI } from '../interface/venta';
 import { useNavigate } from 'react-router';
+import type { AxiosError } from 'axios';
+import { useEstadoReload } from '../../../core/utils/appUtil';
 
 export const ListarVenta = () => {
-    const [ventas, setVentas] = useState<listarVentaI[]>([])
+    const { isReloading, triggerReload } = useEstadoReload()
+    const hoy = new Date().toISOString().split('T')[0];
 
-    const navigate = useNavigate()
+    const [ventas, setVentas] = useState<listarVentaI[]>([]);
+    const navigate = useNavigate();
+    const [fechaInicio, setfechaInicio] = useState(hoy)
+    const [fechaFin, setfechaFin] = useState(hoy)
     useEffect(() => {
         (async () => {
             try {
-                const response = await listarVentas()
-                setVentas(response)
+                const response = await listarVentas(fechaInicio, fechaFin);
+                setVentas(response);
             } catch (error) {
-                console.log(error);
-
+                const e = error as AxiosError<any>
+                console.error(e.response?.data);
             }
-        })()
-    }, [])
+        })();
+    }, [isReloading]);
+
+    const btnBuscar = () => {
+        triggerReload()
+    }
     return (
-        <div className="min-h-screen bg-white p-6 md:p-12 font-sans text-black">
-            <div className="max-w-5xl mx-auto">
+        <div className="w-full font-sans antialiased text-zinc-900">
 
-                {/* HEADER */}
-                <div className="mb-16">
-                    <h1 className="text-2xl font-light tracking-widest uppercase">Ventas</h1>
-                    <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-[0.3em]">Registro de operaciones</p>
-                </div>
+            {/* --- FILTROS (SOLO DISEÑO) --- */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
 
-                {/* FILTROS MINIMALISTAS */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-16 items-end">
-                    <div className="border-b border-black pb-1">
-                        <label className="text-[9px] uppercase tracking-tighter block mb-1 font-bold">Referencia</label>
-                        <input type="text" placeholder="CÓDIGO..." className="w-full outline-none text-xs placeholder:text-slate-200 uppercase" />
+                <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+
+                    {/* Fecha Inicio */}
+                    <div className="flex items-center border border-zinc-200 rounded-sm px-3 py-2 bg-white shadow-sm hover:border-zinc-400 transition-all">
+                        <Calendar size={14} className="text-zinc-400 mr-2" />
+                        <input
+                            value={fechaInicio}
+                            onChange={(e) => setfechaInicio(e.target.value)}
+                            type="date"
+                            className="outline-none text-sm bg-transparent"
+                        />
                     </div>
-                    <div className="border-b border-black pb-1">
-                        <label className="text-[9px] uppercase tracking-tighter block mb-1 font-bold">Cliente</label>
-                        <input type="text" placeholder="NOMBRE..." className="w-full outline-none text-xs placeholder:text-slate-200 uppercase" />
+                    <div className="flex items-center border border-zinc-200 rounded-sm px-3 py-2 bg-white shadow-sm hover:border-zinc-400 transition-all">
+                        <Calendar size={14} className="text-zinc-400 mr-2" />
+                        <input
+                            value={fechaFin}
+                            onChange={(e) => setfechaFin(e.target.value)}
+                            type="date"
+                            className="outline-none text-sm bg-transparent"
+                        />
                     </div>
-                    <div className="border-b border-black pb-1">
-                        <label className="text-[9px] uppercase tracking-tighter block mb-1 font-bold">Fecha</label>
-                        <input type="date" className="w-full outline-none text-xs bg-transparent cursor-pointer uppercase" />
-                    </div>
-                    <button className="bg-black text-white text-[10px] font-bold py-3 hover:bg-slate-800 transition-colors uppercase tracking-[0.2em]">
-                        Filtrar
+                    <button
+                        onClick={() => btnBuscar()}
+                        className="flex items-center gap-2 px-5 py-2 text-[11px] font-black uppercase border border-zinc-900 bg-zinc-900 text-white hover:bg-white hover:text-zinc-900 transition-all rounded-sm tracking-wide"
+                    >
+
+                        <Search size={14} />
+                        Buscar
                     </button>
+
                 </div>
 
-
-
-                <div className="w-full overflow-hidden border border-zinc-100">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="bg-zinc-50 border-b border-zinc-100">
-                                <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider w-12">Cod.</th>
-                                <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider">Cliente</th>
-                                <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider">Estado</th>
-                                <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider">Total</th>
-                                <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Fecha</th>
-                                <th className="p-4 text-[10px] font-bold uppercase text-zinc-400 tracking-wider text-center">Accion</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-zinc-50">
-                            {ventas.map((item) => (
-                                <tr key={item._id} className="group hover:bg-zinc-50/30 transition-colors">
-                                    <td className="p-4">
-
-                                        <p className="text-sm font-bold uppercase tracking-tight">{item.codigo}</p>
-
-
-                                    </td>
-                                    <td className="p-4">
-
-                                        {item.nombre} {item.apellidos}
-
-
-                                    </td>
-                                    <td className="p-4 text-center">
-                                        <span className="text-xs font-bold font-mono italic">{item.tracking}</span>
-                                    </td>
-                                    <td className="p-4 text-center">
-                                        <span className="text-xs font-bold font-mono italic">{item.totalConDescuento}</span>
-                                    </td>
-                                    <td className="p-4 text-center">
-                                        <span className="text-xs font-bold font-mono italic">{item.fechaPedido}</span>
-                                    </td>
-                                    <td className="p-4 text-center">
-                                        <button onClick={() => navigate(`/detalle/venta/${item._id}`)}>Detalle</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-
-
-
-                <div className="mt-24 flex justify-between items-center border-t border-slate-100 pt-8">
-                    <button className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-300 hover:text-black transition-colors">Anterior</button>
-                    <span className="text-[10px] font-mono tracking-widest">01 / 01</span>
-                    <button className="text-[9px] font-bold uppercase tracking-[0.3em] text-black hover:text-slate-400 transition-colors">Siguiente</button>
-                </div>
             </div>
+
+            {/* --- TABLA ESTILO ZINC --- */}
+            <div className="overflow-x-auto border border-zinc-200 rounded-sm shadow-sm">
+                <table className="w-full text-left border-collapse bg-white">
+                    <thead>
+                        <tr className="bg-zinc-900 text-white uppercase text-[10px] tracking-[0.15em]">
+                            <th className="px-6 py-4 font-black">Código</th>
+                            <th className="px-6 py-4 font-black">Cliente</th>
+                            <th className="px-6 py-4 font-black text-center">Estado</th>
+                            <th className="px-6 py-4 font-black text-center"><div className="flex items-center justify-center gap-2"><Calendar size={12} /> Fecha</div></th>
+                            <th className="px-6 py-4 font-black text-right bg-zinc-800">Total</th>
+                            <th className="px-6 py-4 font-black text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-sm divide-y divide-zinc-100">
+                        {ventas.map((item) => (
+                            <tr key={item._id} className="hover:bg-zinc-50 transition-colors group">
+                                <td className="px-6 py-4">
+                                    <span className="font-black text-zinc-900 ">
+                                        {item.codigo}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex flex-col">
+                                        <span className="font-bold text-zinc-800 uppercase text-[13px]">{item.nombre} {item.apellidos}</span>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4 text-center">
+                                    <span className="font-bold text-zinc-800 uppercase text-[13px]">
+                                        {item.tracking}
+                                    </span>
+                                </td>
+                                <td className="font-bold text-zinc-800 uppercase text-[13px]">
+                                    {item.fechaPedido}
+                                </td>
+                                <td className="font-bold text-zinc-800 uppercase text-[13px]">
+                                    {item.totalConDescuento} <span >Bs</span>
+                                </td>
+                                <td className="px-6 py-4 text-center">
+                                    <button
+                                        onClick={() => navigate(`/detalle/venta/${item._id}`)}
+                                        className="inline-flex items-center justify-center w-8 h-8 rounded-sm border border-zinc-200 text-zinc-400 hover:text-zinc-900 hover:border-zinc-900 hover:bg-zinc-100 transition-all"
+                                        title="Ver Detalles"
+                                    >
+                                        <ArrowRight size={16} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+
         </div>
     );
 };
