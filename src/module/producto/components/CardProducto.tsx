@@ -5,6 +5,7 @@ import { Link } from "react-router";
 
 export const CardProducto = ({ item }: { item: ListarProductoPublicoI }) => {
 
+  
 
   return (
     <Link

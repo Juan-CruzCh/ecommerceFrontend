@@ -7,13 +7,20 @@ import {
     ChevronDown,
     ShoppingBag // Importamos el icono del carrito
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import newIcon from "./../../assets/img/newIcon.svg"
+import { useEstadoModal, useEstadoReload } from "../utils/appUtil";
+import { CarritoModal } from "./CarritoModal";
+import type { CarritoI } from "../../module/producto/interface/producto";
 
 export function Menu() {
+    const [productoSeleccionados, setProductoSeleccionados]=useState<number>(0)
+    const {isReloading}=useEstadoReload()
+      const datosLocal = localStorage.getItem("carrito");
+      const productos:CarritoI[] = datosLocal ? JSON.parse(datosLocal) : [];
     const [open, setOpen] = useState(false);
-
+    const {isOpen, openModal } = useEstadoModal()
     const navLinks = [
         { name: "Inicio", href: "/" },
         { name: "Catálogo", href: "/catalogo" },
@@ -21,8 +28,14 @@ export function Menu() {
         { name: "Contactos", href: "/contactos" },
     ];
 
-
+    const btnAbrirCarrito = () => {
+        openModal()
+    }
+    useEffect(()=>{
+        setProductoSeleccionados(productos.length)
+    },[isReloading])
     return (
+        <>
         <header className="sticky top-0 w-full z-50 shadow-md">
 
             {/* Barra superior (Negra) */}
@@ -73,11 +86,11 @@ export function Menu() {
                         {/* Iconos de Acción (Carrito y Menu Móvil) */}
                         <div className="flex items-center gap-4">
                             {/* Carrito de Compras */}
-                            <button className="relative p-2 hover:bg-white/10 rounded-full transition-colors group">
+                            <button onClick={btnAbrirCarrito} className="relative p-2 hover:bg-white/10 rounded-full transition-colors group">
                                 <ShoppingBag size={22} strokeWidth={2} className="group-hover:text-zinc-900 transition-colors" />
                                 {/* Burbuja de cantidad */}
                                 <span className="absolute top-1 right-1 bg-zinc-900 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-[#D68B8F]">
-                                    0
+                                {productoSeleccionados}
                                 </span>
                             </button>
 
@@ -110,5 +123,7 @@ export function Menu() {
                 </div>
             </nav>
         </header>
+        { isOpen && <CarritoModal/>}
+        </>
     );
 }

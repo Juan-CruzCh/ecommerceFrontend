@@ -61,3 +61,14 @@ export interface ProductoDetalle {
     precioVenta: number;
     stock: Stock[];
 }
+
+export interface CarritoI {
+    idProducto: string; 
+    nombre: string;
+    talla: string;
+    idStock: string;
+    cantidad: number;
+    precioVenta: number;
+    total: number;
+    imagen: string;
+}
