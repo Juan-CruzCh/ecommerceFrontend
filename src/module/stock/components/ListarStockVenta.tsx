@@ -86,7 +86,7 @@ export const ListarStockVenta = ({ setCarrito, carrito }: { setCarrito: (v: carr
                                     </td>
                                     <td className="p-4 text-center">
                                         <span className="text-xs font-bold font-mono text-zinc-800">
-                                            {item.precioVenta}
+                                            {item.precioVenta} Bs
                                         </span>
                                     </td>
                                     <td className="p-4 text-center">

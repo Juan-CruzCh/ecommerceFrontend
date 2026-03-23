@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
-import type { ListarProductoPublicoI } from "../../producto/interface/producto";
-import { listarProductosPublico } from "../../producto/service/producto";
-import { urlBackend } from "../../../core/config/intanceAxios";
-import { CardProducto } from "../../producto/components/CardProducto";
+import { useState, useEffect } from "react";
+
 import { ProductosDestacadosPage } from "../../producto/components/ProductosDestacadosPage";
 import { SeoManager } from "../../../core/components/SeoManager";
 
@@ -13,10 +10,7 @@ export const InicioPage = () => {
         "/img/hero2.jpg",
         "/img/hero3.jpg"
     ];
-
     const [currentImage, setCurrentImage] = useState(0);
-    const [productos, setProductos] = useState<ListarProductoPublicoI[]>([]);
-
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentImage((prev) => (prev + 1) % imagenesHero.length);
@@ -24,23 +18,14 @@ export const InicioPage = () => {
         return () => clearInterval(timer);
     }, [imagenesHero.length]);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const reponse = await listarProductosPublico({ destacado: "destacado" })
-                setProductos(reponse)
-            } catch (error) {
 
-            }
-        })()
-    }, [])
     return (
         <div className="w-full bg-white text-zinc-800">
-            <SeoManager 
-                titulo="Moda Tradicional y Diseños Únicos" 
+            <SeoManager
+                titulo="Moda Tradicional y Diseños Únicos"
                 descripcion="Bienvenida a Tienda Marisa. Descubre nuestra nueva colección de ropa tradicional con diseños exclusivos que cuentan historias. Calidad y elegancia en cada prenda."
                 ruta=""
-                imagen="/img/Marisa.jpg" 
+                imagen="/img/Marisa.jpg"
                 tipo="website"
             />
 
@@ -85,9 +70,9 @@ export const InicioPage = () => {
                 </div>
             </div>
 
-                <div className="mt-6">
-                        <ProductosDestacadosPage />
-                </div>
+            <div className="mt-6">
+                <ProductosDestacadosPage />
+            </div>
 
             {/* INFO MARISA */}
             <div className="bg-zinc-50 py-32 border-t border-zinc-100">

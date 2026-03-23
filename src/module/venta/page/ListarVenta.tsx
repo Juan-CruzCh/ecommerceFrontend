@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Search, Eye, FileText, Calendar, Filter, ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Search, Calendar, ArrowRight } from 'lucide-react';
 import { listarVentas } from '../service/venta';
 import type { listarVentaI } from '../interface/venta';
 import { useNavigate } from 'react-router';
@@ -8,12 +8,12 @@ import { useEstadoReload } from '../../../core/utils/appUtil';
 
 export const ListarVenta = () => {
     const { isReloading, triggerReload } = useEstadoReload()
-    const hoy = new Date().toISOString().split('T')[0];
-
+    const hoy = new Date()
+    hoy.setHours(hoy.getHours() - 4)
     const [ventas, setVentas] = useState<listarVentaI[]>([]);
     const navigate = useNavigate();
-    const [fechaInicio, setfechaInicio] = useState(hoy)
-    const [fechaFin, setfechaFin] = useState(hoy)
+    const [fechaInicio, setfechaInicio] = useState(hoy.toISOString().split('T')[0])
+    const [fechaFin, setfechaFin] = useState(hoy.toISOString().split('T')[0])
     useEffect(() => {
         (async () => {
             try {
@@ -101,7 +101,7 @@ export const ListarVenta = () => {
                                     </span>
                                 </td>
                                 <td className="font-bold text-zinc-800 uppercase text-[13px]">
-                                    {item.fechaPedido}
+                                    {item.fechaVenta}
                                 </td>
                                 <td className="font-bold text-zinc-800 uppercase text-[13px]">
                                     {item.totalConDescuento} <span >Bs</span>
