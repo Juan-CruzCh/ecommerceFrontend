@@ -37,6 +37,7 @@ export interface ListarProductoPublicoI {
     nombre: string
     imagenPrincipal: string
     precioVenta: number
+    descripcion: string
 }
 
 export interface filtroProductoPublicoI {

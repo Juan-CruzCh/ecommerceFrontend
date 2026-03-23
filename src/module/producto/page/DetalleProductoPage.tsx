@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { detalleProductoPublico } from "../service/producto";
 import { useParams } from "react-router";
 import type { ProductoDetalle } from "../interface/producto";
-import { urlBackend, urlImagen } from "../../../core/config/intanceAxios";
-import type { AxiosError } from "axios";
+import { urlImagen } from "../../../core/config/intanceAxios";
+import { ShoppingCart, MessageCircle, Minus, Plus, ChevronLeft } from "lucide-react";
+import { Link } from "react-router";
 
 export const ProductoDetallePage = () => {
     const { id } = useParams();
     const [productoDetalle, setProductoDetalle] = useState<ProductoDetalle>();
-
     const [imagenSeleccionada, setImagenSeleccionada] = useState<string>("");
     const [tallaSeleccionada, setTallaSeleccionada] = useState<string | null>(null);
     const [cantidad, setCantidad] = useState<number>(1);
@@ -20,109 +20,145 @@ export const ProductoDetallePage = () => {
                     const response = await detalleProductoPublico(id);
                     setProductoDetalle(response);
                     const principal = response.imagenes.find((img) => img.principal);
-                    if (principal) {
-                        setImagenSeleccionada(principal.nombre);
-                    } else if (response.imagenes.length > 0) {
-                        setImagenSeleccionada(response.imagenes[0].nombre);
-                    }
+                    setImagenSeleccionada(principal?.nombre || response.imagenes[0]?.nombre || "");
                 }
             } catch (error) {
-                const e = error as AxiosError<any>;
-                console.log(e.response?.data);
+                console.error("Error al cargar el producto", error);
             }
         })();
     }, [id]);
 
+    const handleWhatsApp = () => {
+        const mensaje = `Hola! Estoy interesado en el producto: ${productoDetalle?.nombre}${tallaSeleccionada ? ` (Talla: ${tallaSeleccionada})` : ""}.`;
+        const url = `https://wa.me/591XXXXXXXX?text=${encodeURIComponent(mensaje)}`; // Reemplaza XXXXXXXX con tu número
+        window.open(url, '_blank');
+    };
 
+    if (!productoDetalle) return <div className="min-h-screen flex items-center justify-center text-zinc-400">Cargando producto...</div>;
 
     return (
-        <div className="min-h-screen py-20">
-            <div className="max-w-6xl mx-auto px-6">
-                {productoDetalle && (
-                    <div className="grid lg:grid-cols-2 gap-16">
+        <div className="min-h-screen bg-white pb-20">
+            {/* Barra de navegación superior sutil */}
+            <div className="max-w-7xl mx-auto px-6 py-6">
+                <Link to="/" className="inline-flex items-center text-sm text-zinc-500 hover:text-black transition-colors">
+                    <ChevronLeft size={16} />
+                    <span>Volver a la tienda</span>
+                </Link>
+            </div>
 
-                        {/* COLUMNA IZQUIERDA: GALERÍA */}
-                        <div>
-                            <div className="w-full h-[520px] overflow-hidden rounded-md border bg-gray-50">
-                                <img
-                                    src={`${urlImagen}/${imagenSeleccionada}`}
-                                    className="w-full h-full object-cover"
-                                    alt="Producto"
-                                />
+            <div className="max-w-7xl mx-auto px-6 mt-4">
+                <div className="grid lg:grid-cols-12 gap-12">
+
+                    {/* GALERÍA (Columna 7 de 12) */}
+                    <div className="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4">
+                        {/* Miniaturas */}
+                        <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto">
+                            {productoDetalle.imagenes.map((img, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setImagenSeleccionada(img.nombre)}
+                                    className={`relative flex-shrink-0 w-20 h-24 rounded-lg overflow-hidden border-2 transition-all ${imagenSeleccionada === img.nombre ? "border-black shadow-md" : "border-transparent opacity-60 hover:opacity-100"
+                                        }`}
+                                >
+                                    <img src={`${urlImagen}/${img.nombre}`} className="w-full h-full object-cover" alt="Vista miniatura" />
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Imagen Principal */}
+                        <div className="flex-1 aspect-[3/4] rounded-2xl overflow-hidden bg-zinc-50 border border-zinc-100">
+                            <img
+                                src={`${urlImagen}/${imagenSeleccionada}`}
+                                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                                alt={productoDetalle.nombre}
+                            />
+                        </div>
+                    </div>
+
+                    {/* INFORMACIÓN (Columna 5 de 12) */}
+                    <div className="lg:col-span-5 flex flex-col">
+                        <div className="border-b border-zinc-100 pb-6">
+                            <h1 className="text-3xl font-black text-zinc-900 tracking-tight leading-tight">
+                                {productoDetalle.nombre}
+                            </h1>
+                            <div className="mt-4 flex items-baseline gap-1">
+                                <span className="text-sm font-bold text-zinc-500">Bs.</span>
+                                <span className="text-3xl font-black text-zinc-900">{productoDetalle.precioVenta}</span>
                             </div>
+                        </div>
 
-                            <div className="flex gap-3 mt-4 overflow-x-auto">
-                                {productoDetalle.imagenes.map((img, i) => (
-                                    <img
-                                        key={i}
-                                        onClick={() => setImagenSeleccionada(img.nombre)}
-                                        src={`${urlImagen}/${img.nombre}`}
-                                        className={`w-20 h-20 object-cover rounded-md cursor-pointer transition border-2 ${imagenSeleccionada === img.nombre ? "border-black" : "border-transparent opacity-70"
+                        <div className="py-6">
+                            <h2 className="text-xs uppercase font-bold text-zinc-400 tracking-widest mb-3">Descripción</h2>
+                            <p className="text-zinc-600 leading-relaxed text-[15px]">
+                                {productoDetalle.descripcion}
+                            </p>
+                        </div>
+
+                        {/* SECCIÓN TALLAS */}
+                        <div className="mt-4">
+                            <div className="flex justify-between items-center mb-3">
+                                <h2 className="text-sm font-bold text-zinc-900">Seleccionar Talla</h2>
+                                <span className="text-xs text-zinc-400 font-medium">Guía de tallas</span>
+                            </div>
+                            <div className="flex gap-2 flex-wrap">
+                                {productoDetalle.stock.map((item) => (
+                                    <button
+                                        key={item.idStock}
+                                        onClick={() => setTallaSeleccionada(item.talla)}
+                                        className={`px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all ${tallaSeleccionada === item.talla
+                                            ? "bg-zinc-900 text-white border-zinc-900 shadow-lg"
+                                            : "bg-white text-zinc-800 border-zinc-100 hover:border-zinc-300"
                                             }`}
-                                    />
+                                    >
+                                        {item.talla}
+                                    </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* COLUMNA DERECHA: INFO Y COMPRA */}
-                        <div>
-                            <h1 className="text-3xl font-semibold">{productoDetalle.nombre}</h1>
-                            <p className="text-2xl mt-4 font-medium">{productoDetalle.precioVenta} Bs</p>
-                            <p className="mt-6 text-gray-600 leading-relaxed">{productoDetalle.descripcion}</p>
-
-                            {/* SECCIÓN TALLAS */}
-                            <div className="mt-10">
-                                <p className="text-sm font-bold text-gray-700 mb-3">
-                                    Talla: <span className="text-gray-400 font-normal">{tallaSeleccionada || "Selecciona una"}</span>
-                                </p>
-                                <div className="flex gap-3 flex-wrap">
-                                    {productoDetalle.stock.map((item) => (
-                                        <button
-                                            key={item.idStock}
-                                            onClick={() => setTallaSeleccionada(item.talla)}
-                                            className={`min-w-[48px] h-10 border rounded-md text-sm transition ${tallaSeleccionada === item.talla
-                                                ? "bg-black text-white border-black"
-                                                : "bg-white text-black hover:border-black"
-                                                }`}
-                                        >
-                                            {item.talla}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* CANTIDAD */}
-                            <div className="mt-10">
-                                <p className="text-sm text-gray-500 mb-3">Cantidad</p>
-                                <div className="flex items-center border w-fit rounded-md">
-                                    <button
-                                        onClick={() => setCantidad(Math.max(1, cantidad - 1))}
-                                        className="px-4 py-2 hover:bg-gray-100"
-                                    > - </button>
-                                    <span className="px-5 font-medium">{cantidad}</span>
-                                    <button
-                                        onClick={() => setCantidad(cantidad + 1)}
-                                        className="px-4 py-2 hover:bg-gray-100"
-                                    > + </button>
-                                </div>
-                            </div>
-
-                            {/* BOTÓN AÑADIR */}
-                            <div className="mt-12">
+                        {/* CANTIDAD */}
+                        <div className="mt-8">
+                            <h2 className="text-sm font-bold text-zinc-900 mb-3">Cantidad</h2>
+                            <div className="flex items-center bg-zinc-100 w-fit rounded-xl p-1">
                                 <button
-
-                                    className={`w-full py-3 rounded-md transition font-medium ${tallaSeleccionada
-                                        ? "bg-black text-white hover:opacity-90"
-                                        : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                                        }`}
+                                    onClick={() => setCantidad(Math.max(1, cantidad - 1))}
+                                    className="p-2 hover:bg-white hover:shadow-sm rounded-lg transition-all"
                                 >
-                                    Añadir al carrito
+                                    <Minus size={18} />
+                                </button>
+                                <span className="px-6 font-bold text-zinc-800">{cantidad}</span>
+                                <button
+                                    onClick={() => setCantidad(cantidad + 1)}
+                                    className="p-2 hover:bg-white hover:shadow-sm rounded-lg transition-all"
+                                >
+                                    <Plus size={18} />
                                 </button>
                             </div>
                         </div>
 
+                        {/* BOTONES DE ACCIÓN */}
+                        <div className="mt-10 flex flex-col gap-3">
+                            <button
+                                disabled={!tallaSeleccionada}
+                                className={`w-full py-4 rounded-2xl flex items-center justify-center gap-2 font-bold transition-all shadow-xl active:scale-95 ${tallaSeleccionada
+                                    ? "bg-zinc-900 text-white hover:bg-zinc-800 shadow-zinc-200"
+                                    : "bg-zinc-100 text-zinc-400 cursor-not-allowed"
+                                    }`}
+                            >
+                                <ShoppingCart size={20} />
+                                Añadir al Carrito
+                            </button>
+
+                            <button
+                                onClick={handleWhatsApp}
+                                className="w-full py-4 rounded-2xl border-2 border-green-500 text-green-600 flex items-center justify-center gap-2 font-bold hover:bg-green-50 transition-all active:scale-95"
+                            >
+                                <MessageCircle size={20} />
+                                Consultar por WhatsApp
+                            </button>
+                        </div>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );
